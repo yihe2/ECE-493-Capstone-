@@ -1,58 +1,55 @@
+// Login.js
+
 import React, { useState } from 'react';
-// import 'antd/dist/antd.css'; // Import Ant Design styles
-// import "antd/dist/reset.css"
 
-const LoginPage = () => {
-  const [loading, setLoading] = useState(false);
+const Login = () => {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
 
-  const onFinish = (values) => {
-    // Placeholder for login logic
-    setLoading(true);
-    // Simulate API call (replace this with your actual login logic)
-    setTimeout(() => {
-      console.log('Received values:', values);
-      setLoading(false);
-    }, 1000);
+  const handleLogin = () => {
+    // Add your login logic here
+    console.log('Logging in with:', { username, password });
   };
 
   return (
-    <div></div>
-    // <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh'}}>
-    //   <Form
-    //     name="login-form"
-    //     labelCol={{ span: 8 }}
-    //     wrapperCol={{ span: 16 }}
-    //     onFinish={onFinish}
-    //     initialValues={{ remember: true }}
-    //   >
-    //     <Form.Item
-    //       label="Username"
-    //       name="username"
-    //       rules={[{ required: true, message: 'Please input your username!' }]}
-    //     >
-    //       <Input />
-    //     </Form.Item>
-
-    //     <Form.Item
-    //       label="Password"
-    //       name="password"
-    //       rules={[{ required: true, message: 'Please input your password!' }]}
-    //     >
-    //       <Input.Password />
-    //     </Form.Item>
-
-    //     <Form.Item name="remember" valuePropName="checked" wrapperCol={{ offset: 8, span: 16 }}>
-    //       <Checkbox>Remember me</Checkbox>
-    //     </Form.Item>
-
-    //     <Form.Item wrapperCol={{ offset: 8, span: 16 }}>
-    //       <Button type="primary" htmlType="submit" loading={loading}>
-    //         Log in
-    //       </Button>
-    //     </Form.Item>
-    //   </Form>
-    // </div>
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="bg-white p-8 rounded shadow-md w-96">
+        <h2 className="text-2xl font-bold mb-6">Login</h2>
+        <div className="mb-4">
+          <label htmlFor="username" className="text-sm font-semibold text-gray-600 block">
+            Username
+          </label>
+          <input
+            type="text"
+            id="username"
+            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Enter your username"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
+          <label htmlFor="password" className="text-sm font-semibold text-gray-600 block">
+            Password
+          </label>
+          <input
+            type="password"
+            id="password"
+            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Enter your password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </div>
+        <button
+          className="bg-blue-500 text-white p-2 rounded w-full"
+          onClick={handleLogin}
+        >
+          Login
+        </button>
+      </div>
+    </div>
   );
 };
 
-export default LoginPage;
+export default Login;

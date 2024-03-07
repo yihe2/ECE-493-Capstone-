@@ -1,5 +1,5 @@
 import './App.css';
-import LoginPage from "./pages/Login"
+import Login from './pages/Login';
 
 import React from 'react';
 
@@ -20,7 +20,7 @@ const App = () => {
       <Routes>
         {/* does not work */}
         <Route path="/" element={<div className='items-center p-32 bg-black'>penis balls butt</div>}/>
-        {/* <Route path="/login" element={<h1 className="text-3xl font-bold underline">Hello world!</h1>} /> */}
+        <Route path="/login" element={<Login></Login>} />
       </Routes>
     </BrowserRouter>
   );
