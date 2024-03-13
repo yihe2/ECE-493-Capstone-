@@ -1,5 +1,7 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "placeholder until I can get secrets working";
+const uri = "placeholder"
+
+
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -110,3 +112,9 @@ async function insertUser(email, password, salt) {
   }
 }
 
+module.exports = {
+  run,
+  checkUser,
+  deleteUser,
+  insertUser
+}
