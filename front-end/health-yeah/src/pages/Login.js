@@ -1,14 +1,50 @@
 // Login.js
 
 import React, { useState } from 'react';
+import bcrypt from 'bcryptjs' 
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
 
-  const handleLogin = () => {
-    // Add your login logic here
-    console.log('Logging in with:', { username, password });
+  const handleLogin = async () => {
+    if (!username || !password) {
+      console.log('Please fill out both username and password fields.');
+      return;
+    }
+
+    // Hash the password with bcrypt
+    const saltRounds = 10;
+    const hashedPassword = await bcrypt.hash(password, saltRounds);
+
+    // Prepare data for sending to the server
+    const loginData = {
+      username,
+      password: hashedPassword,
+    };
+
+    console.log(hashedPassword)
+
+    // Send data to the Express endpoint
+    try {
+      const response = await fetch('http://your-express-server/login-endpoint', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(loginData),
+      });
+
+      if (response.ok) {
+        console.log('Login successful!');
+        // Add redirection logic or any other actions after successful login
+      } else {
+        console.error('Login failed. Please check your credentials.');
+        // Handle login failure, show error message, etc.
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
   };
 
   return (
