@@ -11,7 +11,7 @@ npm-debug.log*
 **/tests/
 **/.eslintrc
 **/.eslintignore
-**/*.config.js
+# **/*.config.js
 **/coverage/
 **/.nyc_output/
 **/.vscode/
