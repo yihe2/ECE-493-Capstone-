@@ -1,15 +1,15 @@
-// Login.js
+// CreateAccount.js
 
 import React, { useState } from 'react';
 import bcrypt from 'bcryptjs';
 import { Link } from 'react-router-dom';
 
-const Login = () => {
+const CreateAccount = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
 
-  const handleLogin = async () => {
+  const handleCreateAccount = async () => {
     if (!username || !password) {
       setError('Please fill out both username and password fields.');
       return;
@@ -20,39 +20,40 @@ const Login = () => {
     const hashedPassword = await bcrypt.hash(password, saltRounds);
 
     // Prepare data for sending to the server
-    const loginData = {
+    const createAccountData = {
       username,
       password: hashedPassword,
     };
 
     // Send data to the Express endpoint
     try {
-      const response = await fetch('http://your-express-server/login-endpoint', {
+      const response = await fetch('http://your-express-server/create-account-endpoint', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify(createAccountData),
       });
 
       if (response.ok) {
-        console.log('Login successful!');
-        // Add redirection logic or any other actions after successful login
+        console.log('Account created successfully!');
+        // Add redirection logic or any other actions after successful account creation
       } else {
         setError('Invalid username or password. Please try again.');
         // Clear password field on invalid entry
         setPassword('');
       }
     } catch (error) {
-      console.error('Error during login:', error);
-      setError('An error occurred during login. Please try again.');
+      console.error('Error during account creation:', error);
+      setError('An error occurred during account creation. Please try again.');
     }
   };
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
-        <h2 className="text-2xl font-bold mb-6">Login</h2>
+        <h2 className="text-2xl font-bold mb-6">Create Account</h2>
         {error && (
           <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
         )}
@@ -83,15 +84,15 @@ const Login = () => {
           />
         </div>
         <button
-          className="bg-blue-500 text-white p-2 rounded w-full"
-          onClick={handleLogin}
+          className="bg-green-500 text-white p-2 rounded w-full"
+          onClick={handleCreateAccount}
         >
-          Login
+          Create Account
         </button>
         <p className="mt-4 text-gray-600 text-sm">
-          Don't have an account?{' '}
-          <Link to="/create-account" className="text-blue-500">
-            Create one here.
+          Already have an account?{' '}
+          <Link to="/login" className="text-blue-500">
+            Log in here.
           </Link>
         </p>
       </div>
@@ -99,4 +100,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default CreateAccount;
