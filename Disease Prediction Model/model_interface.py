@@ -1,7 +1,10 @@
 from joblib import load
 import pandas as pd
 import json
+import requests
 
+
+url = 'http://127.0.0.1:3001/user/info'
 # Provided mappings
 mappings = {
     "Smoking": {"No": 0, "Yes": 1},
@@ -59,30 +62,38 @@ def JSON_inperpreter(data):
     #     json.dump(data, file)
     # Extracting mode
     mode = data["mode"]
+    email = data["email"]
     
     health_info_values = JSON_health_encoder(data)
     print(health_info_values)
     score = risk_score_prediction(health_info_values)
+    
+    senddata = {
+        'email': email
+    }
     if (mode == 0):
-        return score
+        senddata["score"] = score
     elif(mode == 1):
         age = health_info_values[9]
         if (age >= 12):
-            return -1
+            senddata["monthly_installment"] = -1
         else:
             new_risk_level = data["future_risk_level"]
             if (new_risk_level <= score):
-                return -3
-            while (health_info_values[9] <=12):
-                health_info_values[9] += 1
-                score = risk_score_prediction(health_info_values)
-                if (score >= new_risk_level):
-                    print(score)
-                    print(health_info_values[9])
-                    asset = data["financial_information"]["savings"]
-                    return calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset)
-                
-            return -1
+                senddata["monthly_installment"] = -3
+            else:
+                while (health_info_values[9] <=12):
+                    health_info_values[9] += 1
+                    score = risk_score_prediction(health_info_values)
+                    if (score >= new_risk_level):
+                        print(score)
+                        print(health_info_values[9])
+                        asset = data["financial_information"]["savings"]
+                        senddata["monthly_installment"] = calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset)
+                        break  
+                if not senddata["monthly_installment"]:
+                    senddata["monthly_installment"] = -1
+    response = requests.post(url, json=senddata)
 
 def risk_score_prediction (user_input):
 

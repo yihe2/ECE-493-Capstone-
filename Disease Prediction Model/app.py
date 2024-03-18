@@ -2,6 +2,7 @@
 from flask import Flask, request, jsonify
 import json
 import model_interface
+import requests
 
 # Create an instance of the Flask class
 app = Flask(__name__)
@@ -16,6 +17,9 @@ def receive_health():
     data = request.json
     print(data)
     print(model_interface.JSON_inperpreter(data))
+    send_data = {
+        
+    }
     return jsonify({'status':'success'}), 201
 
 # Run the Flask application
