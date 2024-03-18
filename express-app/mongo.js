@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://sahusnai:IO1dd2GW5RBX81bU@cluster0.nrkocdu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
+const axios = require('axios')
+const uri = "mongodb+srv://sahusnai:<password>@cluster0.nrkocdu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
@@ -36,7 +37,7 @@ const client = new MongoClient(uri, {
       await client.connect();
   
       // Access the database
-      const database = client.db('test');
+      const database = client.db('test2');
   
       // Access the collection (replace 'users' with your desired collection name)
       const collection = database.collection('users');
@@ -59,16 +60,16 @@ const client = new MongoClient(uri, {
   }
   
   // Function for inserting Health Information
-  async function insertHealthInformation(patientId, smoking, alcoholConsumption, sex, age, race, difficultyWalking, diabetic, physicalActivity, generalHealth, asthma, kidneyDisease, skinCancer, stroke, heartDisease) {
+  async function insertHealthInformation(email, smoking, alcoholConsumption, sex, age, race, difficultyWalking, diabetic, physicalActivity, generalHealth, asthma, kidneyDisease, skinCancer, stroke, BMI, PhysicalHealth, MentalHealth, SleepTime) {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   
     try {
       await client.connect();
-      const database = client.db('test');
+      const database = client.db('test2');
       const collection = database.collection('HealthInformation');
   
       const healthInfoDocument = {
-        patientId: patientId,
+        email: email,
         smoking: smoking,
         alcoholConsumption: alcoholConsumption,
         sex: sex,
@@ -82,7 +83,10 @@ const client = new MongoClient(uri, {
         kidneyDisease: kidneyDisease,
         skinCancer: skinCancer,
         stroke: stroke,
-        heartDisease: heartDisease
+        BMI:BMI,
+        physicalHealth:PhysicalHealth,
+        MentalHealth:MentalHealth,
+        sleepTime:SleepTime,
       };
   
       const result = await collection.insertOne(healthInfoDocument);
@@ -93,16 +97,16 @@ const client = new MongoClient(uri, {
   }
 
   // Function for injecting Financial Information 
-  async function insertFinancialInformation(userId, income, savings, investments, debt) {
+  async function insertFinancialInformation(email, income, savings, investments, debt) {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   
     try {
       await client.connect();
-      const database = client.db('test');
+      const database = client.db('test2');
       const collection = database.collection('FinancialInformation');
   
       const financialInfoDocument = {
-        userId: userId,
+        email: email,
         income: income,
         savings: savings,
         investments: investments,
@@ -114,18 +118,78 @@ const client = new MongoClient(uri, {
     } finally {
       await client.close();
     }
+    sendNewUser(email);
   }
 
-  // Updating Functions
-  async function updateHealthInformation(patientId, updates) {
+  // Send to backend using this
+  async function sendNewUser(email) {
+
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   
     try {
       await client.connect();
-      const database = client.db('test');
+      const database = client.db('test2');
+      const healthCollection = database.collection('HealthInformation');
+      const financialCollection = database.collection('FinancialInformation');
+  
+      const health = await healthCollection.findOne({email:email});
+      if (!health) {
+        throw new Error('Health information not found for this email.');
+      }
+
+      const financial = await financialCollection.findOne({email:email});
+      if (!financial) {
+        throw new Error('Health information not found for this email.');
+      }
+      // Send to backend
+    const doc = {
+      email:email,
+      mode: 0,
+      health_information: {
+        BMI:health.BMI,
+        PhysicalHealth:health.PhysicalHealth,
+        MentalHealth:health.MentalHealth,
+        SleepTime:health.SleepTime,
+        Smoking:health.smoking,
+        AlcoholDrinking:health.alcoholConsumption,
+        Stroke:health.stroke,
+        DiffWalking:health.difficultyWalking,
+        Sex:health.sex,
+        AgeCategory:health.age,
+        Race:health.race,
+        Diabetic:health.diabetic,
+        PhysicalActivity:health.physicalActivity,
+        GenHealth:health.generalHealth,
+        Asthma:health.asthma,
+        KidneyDisease:health.kidneyDisease,
+        SkinCancer:health.skinCancer
+      },
+      financial_information:financial,
+      future_risk_level:0.0
+    }
+
+    delete doc.financial_information._id;
+
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/recieve/newuser', doc);
+      console.log(response.data);
+    } catch(error) {
+      console.error(error);
+    }
+    } finally {
+      await client.close();
+    }
+}
+  // Updating Functions
+  async function updateHealthInformation(email, updates) {
+    const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
+  
+    try {
+      await client.connect();
+      const database = client.db('test2');
       const collection = database.collection('HealthInformation');
   
-      const filter = { patientId: patientId };
+      const filter = { email: email };
       const updateDoc = {
         $set: updates
       };
@@ -133,7 +197,7 @@ const client = new MongoClient(uri, {
       const result = await collection.updateOne(filter, updateDoc);
   
       if (result.matchedCount && result.modifiedCount) {
-        console.log(`Successfully updated the health information for patient with ID: ${patientId}`);
+        console.log(`Successfully updated the health information for patient with ID: ${email}`);
       } else {
         console.log('No matching document found or no new data provided to update.');
       }
@@ -142,15 +206,15 @@ const client = new MongoClient(uri, {
     }
   }
 
-  async function updateFinancialInformation(userId, updates) {
+  async function updateFinancialInformation(email, updates) {
     const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
   
     try {
       await client.connect();
-      const database = client.db('test');
+      const database = client.db('test2');
       const collection = database.collection('FinancialInformation');
   
-      const filter = { userId: userId };
+      const filter = { email: email };
       const updateDoc = {
         $set: updates
       };
@@ -158,7 +222,7 @@ const client = new MongoClient(uri, {
       const result = await collection.updateOne(filter, updateDoc);
   
       if (result.matchedCount && result.modifiedCount) {
-        console.log(`Successfully updated the financial information for user with ID: ${userId}`);
+        console.log(`Successfully updated the financial information for user with ID: ${email}`);
       } else {
         console.log('No matching document found or no new data provided to update.');
       }
@@ -172,7 +236,7 @@ const client = new MongoClient(uri, {
 
     try {
       await client.connect();
-      const database = client.db('test');
+      const database = client.db('test2');
       const collection = database.collection('users');
 
       const filter = {email:email};
@@ -197,7 +261,7 @@ const client = new MongoClient(uri, {
     try {
         await client.connect();
 
-        const database = client.db('test');
+        const database = client.db('test2');
         const collection = database.collection('users');
 
         const result = await collection.deleteOne({ email: email });
@@ -214,18 +278,18 @@ const client = new MongoClient(uri, {
     }
 }
   
-async function deleteHealthInformation(patientId) {
+async function deleteHealthInformation(email) {
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
   try {
     await client.connect();
-    const database = client.db('test');
+    const database = client.db('test2');
     const collection = database.collection('HealthInformation');
 
-    const result = await collection.deleteOne({ patientId: patientId });
+    const result = await collection.deleteOne({ email: email });
 
     if (result.deletedCount === 1) {
-      console.log(`Successfully deleted the health information for patient with ID: ${patientId}`);
+      console.log(`Successfully deleted the health information for patient with ID: ${email}`);
     } else {
       console.log('No health information found with that ID.');
     }
@@ -234,18 +298,18 @@ async function deleteHealthInformation(patientId) {
   }
 }
 
-async function deleteFinancialInformation(userId) {
+async function deleteFinancialInformation(email) {
   const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true });
 
   try {
     await client.connect();
-    const database = client.db('test');
+    const database = client.db('test2');
     const collection = database.collection('FinancialInformation');
 
-    const result = await collection.deleteOne({ userId: userId });
+    const result = await collection.deleteOne({ email: email });
 
     if (result.deletedCount === 1) {
-      console.log(`Successfully deleted the financial information for user with ID: ${userId}`);
+      console.log(`Successfully deleted the financial information for user with ID: ${email}`);
     } else {
       console.log('No financial information found with that ID.');
     }
@@ -256,15 +320,15 @@ async function deleteFinancialInformation(userId) {
 
 
   
-  /** 
+  /*
   // Example usage
-  const username = 'GOAT';
-  const password = 'balls';
+  const username = 'test2user';
+  const password = 'pass';
 
   insertUser(username, password);
 
   // Example usage for Health Information
-  const patientId = '12345';
+  const email = 'test2user';
   const smoking = 'Never';
   const alcoholConsumption = 'Occasional';
   const sex = 'Female';
@@ -279,9 +343,13 @@ async function deleteFinancialInformation(userId) {
   const skinCancer = 'No';
   const stroke = 'No';
   const heartDisease = 'No';
+  const BMI = 22.1;
+  const physicalhealth = 5;
+  const MentalHealth = 3;
+  const sleeptime = 6;
 
   insertHealthInformation(
-    patientId,
+    email,
     smoking,
     alcoholConsumption,
     sex,
@@ -295,11 +363,14 @@ async function deleteFinancialInformation(userId) {
     kidneyDisease,
     skinCancer,
     stroke,
-    heartDisease
+    heartDisease,
+    BMI,
+    physicalhealth,
+    MentalHealth,
+    sleeptime
   );
 
   // Example usage for Financial Information
-  const userId = '67890';
   const income = 75000; // annual income in dollars
   const savings = 15000; // savings in dollars
   const investments = [
@@ -309,14 +380,14 @@ async function deleteFinancialInformation(userId) {
   const debt = 20000;
 
   insertFinancialInformation(
-    userId,
+    email,
     income,
     savings,
     investments,
     debt
   );
 
-const patientIdToUpdate = '12345';
+const patientIdToUpdate = 'test2user';
 const healthUpdates = {
   smoking: 'Occasionally',
   generalHealth: 'Fair',
@@ -325,7 +396,70 @@ const healthUpdates = {
 
 updateHealthInformation(patientIdToUpdate, healthUpdates);
 
-const patientIdToDelete = '12345';
+const patientIdToDelete = 'test2user';
 deleteHealthInformation(patientIdToDelete);
 */
 
+const username = 'admin';
+const password = 'pass';
+
+insertUser(username, password);
+
+// Example usage for Health Information
+const email = 'admin';
+const smoking = 'Never';
+const alcoholConsumption = 'Occasional';
+const sex = 'Female';
+const age = 28;
+const race = 'Asian';
+const difficultyWalking = 'No';
+const diabetic = 'No';
+const physicalActivity = 'Regular';
+const generalHealth = 'Good';
+const asthma = 'No';
+const kidneyDisease = 'No';
+const skinCancer = 'No';
+const stroke = 'No';
+const heartDisease = 'No';
+const BMI = 22.1;
+const physicalhealth = 5;
+const MentalHealth = 3;
+const sleeptime = 6;
+
+insertHealthInformation(
+  email,
+  smoking,
+  alcoholConsumption,
+  sex,
+  age,
+  race,
+  difficultyWalking,
+  diabetic,
+  physicalActivity,
+  generalHealth,
+  asthma,
+  kidneyDisease,
+  skinCancer,
+  stroke,
+  heartDisease,
+  BMI,
+  physicalhealth,
+  MentalHealth,
+  sleeptime
+);
+
+const income = 75000; // annual income in dollars
+const savings = 15000; // savings in dollars
+const investments = [
+  { type: 'Stocks', value: 20000 },
+  { type: 'Bonds', value: 5000 }
+];
+const debt = 20000;
+
+insertFinancialInformation(
+  email,
+  income,
+  savings,
+  investments,
+  debt
+);
