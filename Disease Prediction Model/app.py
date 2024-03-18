@@ -1,6 +1,7 @@
 # Import the Flask module
 from flask import Flask, request, jsonify
 import json
+import model_interface
 
 # Create an instance of the Flask class
 app = Flask(__name__)
@@ -14,6 +15,7 @@ def hello_world():
 def receive_health():
     data = request.json
     print(data)
+    print(model_interface.JSON_inperpreter(data))
     return jsonify({'status':'success'}), 201
 
 # Run the Flask application
