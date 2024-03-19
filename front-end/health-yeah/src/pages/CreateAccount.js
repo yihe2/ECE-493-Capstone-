@@ -1,52 +1,75 @@
 // CreateAccount.js
 
 import React, { useState } from 'react';
-import bcrypt from 'bcryptjs';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 const CreateAccount = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const navigate = useNavigate();
 
   const handleCreateAccount = async () => {
+    
+
     if (!username || !password) {
       setError('Please fill out both username and password fields.');
       return;
     }
 
-    // Hash the password with bcrypt
-    const saltRounds = 10;
-    const hashedPassword = await bcrypt.hash(password, saltRounds);
-
     // Prepare data for sending to the server
     const createAccountData = {
-      username,
-      password: hashedPassword,
+      email: username,
+      password: password,
     };
-
-    // Send data to the Express endpoint
+    console.log({...createAccountData})
     try {
-      const response = await fetch('http://your-express-server/create-account-endpoint', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(createAccountData),
+      console.log("before await")
+      const data = await axios.post("http://localhost:3001/create-account", {
+        ...createAccountData,
+      },
+      {
+        withCredentials: true,
       });
-
-      if (response.ok) {
-        console.log('Account created successfully!');
-        // Add redirection logic or any other actions after successful account creation
+      console.log(data)
+      if (data.status === 201) {
+        console.log('Create Account Successful!');
+        // navigate("/secret")
+        navigate("/secret");
+        // Add redirection logic or any other actions after successful login
       } else {
         setError('Invalid username or password. Please try again.');
         // Clear password field on invalid entry
+        console.log(data)
         setPassword('');
       }
-    } catch (error) {
-      console.error('Error during account creation:', error);
-      setError('An error occurred during account creation. Please try again.');
+    } catch (err) {
+      console.log(err);
     }
+
+    // Send data to the Express endpoint
+    // try {
+    //   const response = await fetch('http://your-express-server/create-account-endpoint', {
+    //     method: 'POST',
+    //     headers: {
+    //       'Content-Type': 'application/json',
+    //     },
+    //     body: JSON.stringify(createAccountData),
+    //   });
+
+    //   if (response.ok) {
+    //     console.log('Account created successfully!');
+    //     // Add redirection logic or any other actions after successful account creation
+    //   } else {
+    //     setError('Invalid username or password. Please try again.');
+    //     // Clear password field on invalid entry
+    //     setPassword('');
+    //   }
+    // } catch (error) {
+    //   console.error('Error during account creation:', error);
+    //   setError('An error occurred during account creation. Please try again.');
+    // }
   };
   
 
