@@ -8,6 +8,7 @@ import axios from 'axios';
 const SecretTest = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies([]);
+  // Issue with logout
   // useEffect(() => {
   //   const verifyUser = async () => {
   //     if(!cookies.jwt) {
@@ -38,7 +39,7 @@ const SecretTest = () => {
   };
   return (
     <div>
-      <h1>Cock n Balls</h1>
+      <h1>end me</h1>
       <button onClick={logOut}>Log Out</button>
     </div>
   
