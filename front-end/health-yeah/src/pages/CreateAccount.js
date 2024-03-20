@@ -36,6 +36,7 @@ const CreateAccount = () => {
       if (data.status === 201) {
         console.log('Create Account Successful!');
         // navigate("/secret")
+        console.log(data)
         navigate("/secret");
         // Add redirection logic or any other actions after successful login
       } else {

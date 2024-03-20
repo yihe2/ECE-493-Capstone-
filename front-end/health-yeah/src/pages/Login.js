@@ -29,7 +29,9 @@ const Login = () => {
 
       if (response.status === 200) {
         console.log('Login successful!');
+        console.log(response)
         // Add redirection logic or any other actions after successful login
+        console.log(response)
         navigate("/secret")
       } else {
         setError('Invalid username or password. Please try again.');

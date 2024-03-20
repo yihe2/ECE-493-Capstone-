@@ -65,7 +65,8 @@ module.exports.login = async (req, res, next) => {
           httpOnly: false,
           maxAge: maxAge * 1000,
         });
-    
+        console.log("pushing cookie")
+        
         res.status(200).json({ user: user._id, created: true });
       } catch (err) {
         console.log(err);
