@@ -26,8 +26,8 @@ const CreateAccount = () => {
     console.log({...createAccountData})
     try {
       console.log("before await")
-      const data = await axios.post("http://localhost:3001/create-account", {
-        ...createAccountData,
+      const data = await axios.post("http://127.0.0.1:3001/create-account", createAccountData, {
+        withCredentials: true,
       },
       {
         withCredentials: true,

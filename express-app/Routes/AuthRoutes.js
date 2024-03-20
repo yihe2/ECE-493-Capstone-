@@ -1,7 +1,5 @@
-const { register, login } = require("../controllers/AuthControllers");
+const { register, log_in } = require("../controllers/AuthControllers");
 const { checkUser } = require("../middleware/authMiddleware");
-const User = require("../models/userModel");
-const jwt = require("jsonwebtoken");
 const router = require("express").Router();
 
 
@@ -11,10 +9,8 @@ router.get('/', (req, res) => {
 });
 
 router.post('/create-account', register);
-router.post("/login", login);
+router.post("/login", log_in);
 router.post("/secret", checkUser)
-
-
 
 
 

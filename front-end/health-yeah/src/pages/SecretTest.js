@@ -7,13 +7,15 @@ import axios from 'axios';
 
 const SecretTest = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies([]);
+  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   // Issue with logout
   useEffect(() => {
     const verifyUser = async () => {
       if(!cookies.jwt) {
+        console.log(cookies)
         console.log("no cookie initial check")
-        navigate("/login");
+        // what?????? 
+        // navigate("/login");
       }
       else {
         const data = await axios.post("http://localhost:3001/secret", {},
@@ -23,7 +25,7 @@ const SecretTest = () => {
         );
         if (!data.status) {
           console.log("not data status")
-          removeCookie("jwt");
+          removeCookie("jwt", {path: "/"});
           navigate("/login")
         }
         else {
@@ -32,7 +34,7 @@ const SecretTest = () => {
       }
     }
     verifyUser();
-  }, [cookies, navigate, removeCookie])
+  }, [cookies, navigate, removeCookie, setCookie])
 
   const logOut = () => {
     console.log("Cookies::")

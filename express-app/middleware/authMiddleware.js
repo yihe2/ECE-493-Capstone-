@@ -12,6 +12,7 @@ module.exports.checkUser = (req, res, next) => {
             else {
                 const user = await User.findById(decodedToken.id);
                 if (user) {
+                    console.log("called from middlware")
                     res.json({status: true, user: user.email});
                 }
                 else {

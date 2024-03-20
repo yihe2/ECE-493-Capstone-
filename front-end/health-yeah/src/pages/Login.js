@@ -3,12 +3,14 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from "axios";
+import Cookies from 'js-cookie';
 
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const navigate = useNavigate();
+  // const [cookies, setCookie, removeCookie] = useCookies([]);
 
   const handleLogin = async () => {
     if (!username || !password) {
@@ -23,16 +25,18 @@ const Login = () => {
     };
 
     try {
-      const response = await axios.post("http://localhost:3001/login", {
-        ...loginData,
-      });
+      const response = await axios.post("http://127.0.0.1:3001/login", loginData, {
+        withCredentials: true,
+    });
 
       if (response.status === 200) {
         console.log('Login successful!');
-        console.log(response)
+        // console.log(response)
         // Add redirection logic or any other actions after successful login
-        console.log(response)
         navigate("/secret")
+
+        
+        // navigate("/secret")
       } else {
         setError('Invalid username or password. Please try again.');
         // Clear password field on invalid entry
