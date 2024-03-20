@@ -13,6 +13,7 @@ import {
   Link, 
   Redirect
 } from "react-router-dom";
+import HealthInfoForm from './pages/HealthInfoForm';
 
 
 const App = () => {
@@ -24,6 +25,7 @@ const App = () => {
         <Route path="/login" element={<Login></Login>} />
         <Route path="/create-account" element={<CreateAccount/>}/>
         <Route path="/secret" element={<SecretTest />} />
+        <Route path="/healthinfo" element= {<HealthInfoForm />}/>
       </Routes>
     </BrowserRouter>
   );
