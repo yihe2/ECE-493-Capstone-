@@ -7,6 +7,7 @@ const port = 3001;
 const authRoutes = require("./Routes/AuthRoutes.js");
 const cookieParser = require("cookie-parser")
 
+app.use(express.json());
 
 // Define a route for the root URL
 // app.get('/', (req, res) => {
@@ -23,7 +24,16 @@ app.post('/sanity-check', async (req, res) => {
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Internal Server Error' });
-  }
+  }});
+
+app.get("/", (req, res) => {
+  res.send("Hello, Express!");
+});
+
+app.post("/user/info", (req, res) => {
+  const info = req.body;
+  console.log(info);
+  res.json({ status: "success" });
 });
 
 // app.delete('/delete-account', async (req, res) => {
