@@ -47,9 +47,12 @@ app.post("/user/info", (req, res) => {
 // });
 
 // Start the server
-app.listen(port, () => {
+server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+
+module.exports = {app, server};
 
 
 
@@ -69,3 +72,4 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use("/", authRoutes);
+
