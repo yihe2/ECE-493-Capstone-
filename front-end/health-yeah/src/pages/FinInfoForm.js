@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import Navbar from '../components/Navbar';
 
 const FinInfoForm = () => {
   const [formData, setFormData] = useState({
@@ -39,31 +40,34 @@ const FinInfoForm = () => {
   };
 
   return (
-    <div className="max-w-md mx-auto mt-8">
-      <h1 className="text-2xl font-semibold mb-4">Financial Info Form</h1>
-      <form onSubmit={handleSubmit}>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Savings ($)</label>
-          <input type="number" className="form-input w-full" id="savings" name="savings" min="0" defaultValue={formData.savings} onChange={handleChange} />  
-        </div>
-        <div className="mb-4">          
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="stock">Stock ($)</label>
-          <input type="number" className="form-input w-full" id="stock" name="stockValue" min="0" defaultValue={formData.stockValue} onChange={handleChange} />
-            {/* <input type="text" className="form-input w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} /> */}
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Income ($)</label>
-          <input type="number" className="form-input w-full" id="savings" name="savings" min="0" defaultValue={formData.savings} onChange={handleChange} />  
-        </div>
-        <div className="mb-4">
-          <label className="block text-gray-700 font-semibold mb-2" htmlFor="outstandingDebt">Outstanding Debts ($)</label>
-          <input type="number" className="form-input w-full" id="outstandingDebt" name="outstandingDebt" min="0" defaultValue={formData.outstandingDebt} onChange={handleChange} />  
-        </div>
-        <div className="mt-6">
-          <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
-        </div>
-      </form>
-    </div>
+    <>
+      <Navbar />
+      <div className="max-w-md mx-auto mt-8">
+        <h1 className="text-2xl font-semibold mb-4">Financial Info Form</h1>
+        <form onSubmit={handleSubmit}>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Savings ($)</label>
+            <input type="number" className="form-input w-full" id="savings" name="savings" min="0" defaultValue={formData.savings} onChange={handleChange} />  
+          </div>
+          <div className="mb-4">          
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="stock">Stock ($)</label>
+            <input type="number" className="form-input w-full" id="stock" name="stockValue" min="0" defaultValue={formData.stockValue} onChange={handleChange} />
+              {/* <input type="text" className="form-input w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} /> */}
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Income ($)</label>
+            <input type="number" className="form-input w-full" id="savings" name="savings" min="0" defaultValue={formData.savings} onChange={handleChange} />  
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="outstandingDebt">Outstanding Debts ($)</label>
+            <input type="number" className="form-input w-full" id="outstandingDebt" name="outstandingDebt" min="0" defaultValue={formData.outstandingDebt} onChange={handleChange} />  
+          </div>
+          <div className="mt-6">
+            <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
+          </div>
+        </form>
+      </div>
+    </>
   );
 };
 
