@@ -16,6 +16,8 @@ app.post("/user/info", (req, res) => {
 });
 
 // Start the server
-app.listen(port, () => {
+server = app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });
+
+module.exports = {app, server};
