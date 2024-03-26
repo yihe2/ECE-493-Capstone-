@@ -9,13 +9,16 @@ const SecretTest = () => {
   const navigate = useNavigate();
   const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   // Issue with logout
+
+
+  
   useEffect(() => {
     const verifyUser = async () => {
-      if(!cookies.jwt) {
+      if (sessionStorage.getItem("user") === null) {
         console.log(cookies)
         console.log("no cookie initial check")
         // what?????? 
-        // navigate("/login");
+        navigate("/login");
       }
       else {
         const data = await axios.post("http://localhost:3001/secret", {},
@@ -39,7 +42,7 @@ const SecretTest = () => {
   const logOut = () => {
     console.log("Cookies::")
     console.log(cookies)
-    removeCookie("jwt") // does not work
+    sessionStorage.removeItem("user")
     navigate('/login');
   };
   return (
