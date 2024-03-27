@@ -4,7 +4,6 @@ import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext'
 import axios from "axios";
-import Cookies from 'js-cookie';
 
 const Login = () => {
   const [username, setUsername] = useState('');
@@ -13,7 +12,6 @@ const Login = () => {
   const [isLoading, setIsLoading] = useState(null)
   const { dispatch } = useAuthContext()
   const navigate = useNavigate();
-  // const [cookies, setCookie, removeCookie] = useCookies([]);
 
   const handleLogin = async () => {
 
@@ -48,10 +46,7 @@ const Login = () => {
   
         // update loading state
         setIsLoading(false)
-        navigate("/secret")
-
-        
-        // navigate("/secret")
+        navigate("/")
       } else {
         setError('Invalid username or password. Please try again.');
         // Clear password field on invalid entry
@@ -62,30 +57,6 @@ const Login = () => {
       setIsLoading(false)
       console.log(err);
     }
-  
-
-    // // Send data to the Express endpoint
-    // try {
-    //   const response = await fetch('http://your-express-server/login-endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(loginData),
-    //   });
-
-    //   if (response.ok) {
-    //     console.log('Login successful!');
-    //     // Add redirection logic or any other actions after successful login
-    //   } else {
-    //     setError('Invalid username or password. Please try again.');
-    //     // Clear password field on invalid entry
-    //     setPassword('');
-    //   }
-    // } catch (error) {
-    //   console.error('Error during login:', error);
-    //   setError('An error occurred during login. Please try again.');
-    // }
   };
 
   return (
@@ -131,6 +102,12 @@ const Login = () => {
           Don't have an account?{' '}
           <Link to="/create-account" className="text-blue-500">
             Create one here.
+          </Link>
+        </p>
+        <p className="mt-4 text-gray-600 text-sm">
+          View our Methodology{' '}
+          <Link to="/information" className="text-blue-500">
+            Here
           </Link>
         </p>
       </div>

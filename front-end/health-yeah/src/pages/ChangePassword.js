@@ -1,5 +1,6 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import axios from 'axios';
 import Navbar from '../components/Navbar';
 
 const ChangePassword = () => {
@@ -7,6 +8,34 @@ const ChangePassword = () => {
   const [newPassword, setNewPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [errorMessage, setErrorMessage] = useState('');
+  const navigate = useNavigate();
+
+
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (sessionStorage.getItem("user") === null) {
+        console.log("no cookie initial check")
+        navigate("/login");
+      }
+      else {
+        const data = await axios.post("http://localhost:3001/secret", {},
+        {
+          withCredentials: true,
+        }
+        );
+        if (!data.status) {
+          console.log("not data status")
+          navigate("/login")
+        }
+        else {
+          console.log(data)
+        }
+      }
+  }
+    verifyUser();
+  }, [])
+
+  
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -95,12 +124,12 @@ const ChangePassword = () => {
               Change Password
             </button>
           </form>
-          <p className="mt-4 text-gray-600 text-sm">
+          {/* <p className="mt-4 text-gray-600 text-sm">
             Remember your password?{' '}
             <Link to="/login" className="text-blue-500">
               Log in here.
             </Link>
-          </p>
+          </p> */}
         </div>
       </div>
     </>

@@ -1,8 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import Navbar from '../components/Navbar';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const HealthInfoForm = () => {
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
+    email: '',
     smoking: 'Yes',
     alcoholConsumption: 'Yes',
     sex: 'Male',
@@ -15,8 +19,38 @@ const HealthInfoForm = () => {
     asthma: '',
     kidneyDisease: '',
     skinCancer: '',
-    historyOfHeartDiseaseAndStroke: ''
+    historyOfHeartDiseaseAndStroke: '',
+    stroke: '',
+    BMI: '18.5',
+    physicalHealth: '',
+    mentalHealth: '',
+    sleepTime: '8',
   });
+
+    // login effect
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (sessionStorage.getItem("user") === null) {
+        console.log("no cookie initial check")
+        navigate("/login");
+      }
+      else {
+        const data = await axios.post("http://localhost:3001/secret", {},
+        {
+          withCredentials: true,
+        }
+        );
+        if (!data.status) {
+          console.log("not data status")
+          navigate("/login")
+        }
+        else {
+          console.log(data)
+        }
+      }
+  }
+    verifyUser();
+  }, [])
 
   // FROM CHAT
   // useEffect(() => {
@@ -42,8 +76,13 @@ const HealthInfoForm = () => {
   };
 
   const handleSubmit = (e) => {
+    setFormData({
+      ...formData,
+      ["email"]: sessionStorage.getItem("user")
+    });
     e.preventDefault();
-    // Here you can perform any action with the form data, such as submitting it to a backend
+
+
     console.log(formData);
   };
 
@@ -77,7 +116,6 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="age">Age</label>
             <input type="number" className="form-input w-full" id="age" name="age" min="1" defaultValue={formData.age} onChange={handleChange}/>
-            {/* <input type="text" className="form-input w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} /> */}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="race">Race</label>
@@ -97,6 +135,7 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="diabetic">Diabetic</label>
             <select className="form-select w-full" id="diabetic" name="diabetic" value={formData.diabetic} onChange={handleChange} required>
+              <option value="2">Yes When Pregnant</option>
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select> 
@@ -112,7 +151,7 @@ const HealthInfoForm = () => {
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="generalHealth">General Health</label>
             <select className="form-select w-full" id="generalHealth" name="generalHealth" value={formData.generalHealth} onChange={handleChange} required>
               <option value="...">...</option>
-              <option value="...">...</option>
+              <option value="wowo">test</option>
             </select> 
           </div>
           <div className="mb-4">
@@ -137,14 +176,41 @@ const HealthInfoForm = () => {
             </select> 
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="history">History of Heart Disease/Stroke</label>
-            <select className="form-select w-full" id="history" name="history" value={formData.historyOfHeartDiseaseAndStroke} onChange={handleChange} required>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="historyOfHeartDiseaseAndStroke">History of Heart Disease/Stroke</label>
+            <select className="form-select w-full" id="historyOfHeartDiseaseAndStroke" name="historyOfHeartDiseaseAndStroke" value={formData.historyOfHeartDiseaseAndStroke} onChange={handleChange} required>
               <option value="1">Yes</option>
               <option value="0">No</option>
             </select> 
           </div>
-          {/* TODO: Repeat similar structure for other form fields */}
-          
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="stroke">Stroke</label>
+            <select className="form-select w-full" id="stroke" name="stroke" value={formData.stroke} onChange={handleChange} required>
+              <option value="1">Yes</option>
+              <option value="0">No</option>
+            </select> 
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="bmi">BMI</label>
+            <input type="number" step=".01" className="form-input w-full" id="bmi" name="bmi" min="1" defaultValue={formData.BMI} onChange={handleChange}/>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="physicalHealth">Physical Health</label>
+            <select className="form-select w-full" id="physicalHealth" name="physicalHealth" value={formData.physicalHealth} onChange={handleChange} required>
+              <option value="...">...</option>
+              <option value="...">...</option>
+            </select> 
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="mentalHealth">Mental Health</label>
+            <select className="form-select w-full" id="mentalHealth" name="mentalHealth" value={formData.mentalHealth} onChange={handleChange} required>
+              <option value="...">...</option>
+              <option value="...">...</option>
+            </select> 
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="sleepTime">Sleep Time</label>
+            <input type="number" className="form-input w-full" id="sleepTime" name="sleepTime" min="0" max="24" defaultValue={formData.sleepTime} onChange={handleChange}/>
+          </div>
           <div className="mt-6">
             <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
           </div>
