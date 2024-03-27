@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../hooks/useAuthContext'
 import axios from "axios";
 import Cookies from 'js-cookie';
 
@@ -9,14 +10,19 @@ const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(null)
+  const { dispatch } = useAuthContext()
   const navigate = useNavigate();
   // const [cookies, setCookie, removeCookie] = useCookies([]);
 
   const handleLogin = async () => {
+
     if (!username || !password) {
       setError('Please fill out both username and password fields.');
       return;
     }
+
+    setIsLoading(true)
 
     // Prepare data for sending to the server
     const loginData = {
@@ -29,10 +35,19 @@ const Login = () => {
         withCredentials: true,
     });
 
+
       if (response.status === 200) {
-        console.log('Login successful!');
+        console.log(response);
         // console.log(response)
         // Add redirection logic or any other actions after successful login
+        
+        sessionStorage.setItem('user', JSON.stringify(response.data.email))
+
+        // update the auth context
+        dispatch({type: 'LOGIN', payload: response.data.email})
+  
+        // update loading state
+        setIsLoading(false)
         navigate("/secret")
 
         
@@ -40,9 +55,11 @@ const Login = () => {
       } else {
         setError('Invalid username or password. Please try again.');
         // Clear password field on invalid entry
+        setIsLoading(false)
         setPassword('');
       }
     } catch (err) {
+      setIsLoading(false)
       console.log(err);
     }
   
