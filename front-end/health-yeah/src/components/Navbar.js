@@ -12,6 +12,7 @@ const Navbar = () => {
   const handleLogout = () => {
     // Implement your logout logic here, e.g., clear local storage, etc.
     // Then redirect to the login page or wherever appropriate.
+    sessionStorage.removeItem("user")
     navigate("/login");
   };
 

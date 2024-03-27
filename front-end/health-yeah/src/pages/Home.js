@@ -1,9 +1,36 @@
 // Home.js
 
-import React from 'react';
+import React, { useEffect } from 'react';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
+  const navigate = useNavigate();
+  useEffect(() => {
+    const verifyUser = async () => {
+      if (sessionStorage.getItem("user") === null) {
+        console.log("no cookie initial check")
+        navigate("/login");
+      }
+      else {
+        const data = await axios.post("http://localhost:3001/secret", {},
+        {
+          withCredentials: true,
+        }
+        );
+        if (!data.status) {
+          console.log("not data status")
+          navigate("/login")
+        }
+        else {
+          console.log(data)
+        }
+      }
+  }
+    verifyUser();
+  }, [])
+
   return (
     <>
         <Navbar />

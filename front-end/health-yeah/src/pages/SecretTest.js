@@ -1,21 +1,18 @@
 import React, {useEffect}  from 'react';
 import { useNavigate } from 'react-router-dom';
-import {useCookies} from 'react-cookie';
 import axios from 'axios';
 
 
 
 const SecretTest = () => {
   const navigate = useNavigate();
-  const [cookies, setCookie, removeCookie] = useCookies(["jwt"]);
   // Issue with logout
 
 
-  
+  // login effect
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
-        console.log(cookies)
         console.log("no cookie initial check")
         // what?????? 
         navigate("/login");
@@ -28,7 +25,6 @@ const SecretTest = () => {
         );
         if (!data.status) {
           console.log("not data status")
-          removeCookie("jwt", {path: "/"});
           navigate("/login")
         }
         else {
@@ -37,11 +33,9 @@ const SecretTest = () => {
       }
     }
     verifyUser();
-  }, [cookies, navigate, removeCookie, setCookie])
+  }, [])
 
   const logOut = () => {
-    console.log("Cookies::")
-    console.log(cookies)
     sessionStorage.removeItem("user")
     navigate('/login');
   };

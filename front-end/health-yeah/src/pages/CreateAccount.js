@@ -2,21 +2,25 @@
 
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { useAuthContext } from '../hooks/useAuthContext'
 import axios from 'axios';
 
 const CreateAccount = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
+  const { dispatch } = useAuthContext();
 
   const handleCreateAccount = async () => {
-    
-
+  
     if (!username || !password) {
       setError('Please fill out both username and password fields.');
       return;
     }
+
+    setIsLoading(true)
 
     // Prepare data for sending to the server
     const createAccountData = {
@@ -25,7 +29,6 @@ const CreateAccount = () => {
     };
     console.log({...createAccountData})
     try {
-      console.log("before await")
       const data = await axios.post("http://127.0.0.1:3001/create-account", createAccountData, {
         withCredentials: true,
       },
@@ -33,44 +36,24 @@ const CreateAccount = () => {
         withCredentials: true,
       });
       console.log(data)
-      if (data.status === 201) {
+      if (data.status === 200) {
         console.log('Create Account Successful!');
-        // navigate("/secret")
-        console.log(data)
-        navigate("/secret");
+        sessionStorage.setItem('user', JSON.stringify(data.data.email))
+        dispatch({type: 'LOGIN', payload: data.data.email})
+        setIsLoading(false)
+        navigate("/healthinfo")
         // Add redirection logic or any other actions after successful login
       } else {
         setError('Invalid username or password. Please try again.');
+        setIsLoading(false)
         // Clear password field on invalid entry
         console.log(data)
         setPassword('');
       }
     } catch (err) {
+      setIsLoading(false)
       console.log(err);
     }
-
-    // Send data to the Express endpoint
-    // try {
-    //   const response = await fetch('http://your-express-server/create-account-endpoint', {
-    //     method: 'POST',
-    //     headers: {
-    //       'Content-Type': 'application/json',
-    //     },
-    //     body: JSON.stringify(createAccountData),
-    //   });
-
-    //   if (response.ok) {
-    //     console.log('Account created successfully!');
-    //     // Add redirection logic or any other actions after successful account creation
-    //   } else {
-    //     setError('Invalid username or password. Please try again.');
-    //     // Clear password field on invalid entry
-    //     setPassword('');
-    //   }
-    // } catch (error) {
-    //   console.error('Error during account creation:', error);
-    //   setError('An error occurred during account creation. Please try again.');
-    // }
   };
   
 
@@ -117,6 +100,12 @@ const CreateAccount = () => {
           Already have an account?{' '}
           <Link to="/login" className="text-blue-500">
             Log in here.
+          </Link>
+        </p>
+        <p className="mt-4 text-gray-600 text-sm">
+          View our Methodology{' '}
+          <Link to="/information" className="text-blue-500">
+            Here
           </Link>
         </p>
       </div>
