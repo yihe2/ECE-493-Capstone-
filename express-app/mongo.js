@@ -26,44 +26,7 @@ async function run() {
     await client.close();
   }
 }
-run().catch(console.dir);
 
-async function insertUser(email, password, salt) {
-  // Connection URI
-  // const uri = 'mongodb://localhost:27017/your-database-name';
-
-  // Create a new MongoClient
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-  try {
-    // Connect to the MongoDB server
-    await client.connect();
-
-    // Access the database
-    const database = client.db("test2");
-
-    // Access the collection (replace 'users' with your desired collection name)
-    const collection = database.collection("users");
-
-    // Create a document to insert
-    const userDocument = {
-      email: email,
-      password: password,
-      salt: salt,
-    };
-
-    // Insert the document
-    const result = await collection.insertOne(userDocument);
-
-    console.log(`User inserted with ID: ${result.insertedId}`);
-  } finally {
-    // Close the client connection
-    await client.close();
-  }
-}
 
 // Function for inserting Health Information
 async function insertHealthInformation(
@@ -140,7 +103,7 @@ async function insertFinancialInformation(
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
     const financialInfoDocument = {
@@ -157,7 +120,8 @@ async function insertFinancialInformation(
   } finally {
     await client.close();
   }
-  sendNewUser(email, 1);
+  // TODO: call send user indep. -> rename sthe function
+  // sendNewUser(email, 1);
 }
 
 // Send to backend using this
@@ -237,9 +201,8 @@ async function updateHealthInformation(email, updates) {
     await client.connect();
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
-    console.log("updates from mongo.js")
-    console.log(updates)
 
+    // remove ID from update
     delete updates._id
 
     const filter = { email: email };
@@ -258,8 +221,9 @@ async function updateHealthInformation(email, updates) {
       );
     }
   
-  } catch (e) {console.log(e)}
-  finally {
+  } catch (e) {
+    console.log(e)
+  } finally {
     await client.close();
   }
 }
@@ -294,6 +258,36 @@ async function getHealthInformation(email) {
   }
 }
 
+async function getFinancialInformation(email) {
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  try {
+    await client.connect();
+    const database = client.db("test");
+    const collection = database.collection("FinancialInformation");
+    console.log(email)
+    const filter = { email: email };
+    const result = await collection.findOne(filter);
+    console.log(result)
+
+    if (result) {
+      console.log(`Found financial information for patient with email: ${email}`);
+      return result;
+    } else {
+      console.log("No financial information found for the specified email.");
+      return null; 
+    }
+  } catch (error) {
+    console.error("An error occurred while fetching health information:", error);
+    throw error; 
+  } finally {
+    await client.close();
+  }
+}
+
 async function updateFinancialInformation(email, updates) {
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
@@ -302,8 +296,10 @@ async function updateFinancialInformation(email, updates) {
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("FinancialInformation");
+
+    delete updates._id
 
     const filter = { email: email };
     const updateDoc = {
@@ -433,7 +429,6 @@ async function deleteFinancialInformation(email) {
 
 module.exports = {
   run,
-  insertUser,
   insertHealthInformation,
   insertFinancialInformation,
   sendNewUser,
@@ -443,5 +438,6 @@ module.exports = {
   deleteUser,
   deleteHealthInformation,
   deleteFinancialInformation,
-  getHealthInformation
+  getHealthInformation,
+  getFinancialInformation
 };
