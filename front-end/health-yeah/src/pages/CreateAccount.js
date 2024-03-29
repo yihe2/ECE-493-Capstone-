@@ -38,7 +38,7 @@ const CreateAccount = () => {
       console.log(data)
       if (data.status === 200) {
         console.log('Create Account Successful!');
-        sessionStorage.setItem('user', JSON.stringify(data.data.email))
+        sessionStorage.setItem('user', data.data.email)
         dispatch({type: 'LOGIN', payload: data.data.email})
         setIsLoading(false)
         navigate("/healthinfo")

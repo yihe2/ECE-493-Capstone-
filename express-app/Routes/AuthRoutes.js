@@ -1,16 +1,94 @@
 const { register, log_in } = require("../controllers/AuthControllers");
 const { checkUser } = require("../middleware/authMiddleware");
 const router = require("express").Router();
+const { insertHealthInformation, updateHealthInformation, getHealthInformation } = require("../mongo");
 
 
 router.get('/', (req, res) => {
-    console.log("works")
     res.send('Poppin here');
 });
 
 router.post('/create-account', register);
 router.post("/login", log_in);
 router.post("/secret", checkUser)
+router.post("/insert-health-info",  async (req, res) => {
+  try {
+    const {
+      email,
+      smoking,
+      alcoholConsumption,
+      sex,
+      age,
+      race,
+      difficultyWalking,
+      diabetic,
+      physicalActivity,
+      generalHealth,
+      asthma,
+      kidneyDisease,
+      skinCancer,
+      stroke,
+      BMI,
+      physicalHealth,
+      mentalHealth,
+      sleepTime,
+    } = req.body;
+     // should work
+    insertHealthInformation(
+      email,
+      smoking,
+      alcoholConsumption,
+      sex, 
+      age,
+      race,
+      difficultyWalking,
+      diabetic,
+      physicalActivity,
+      generalHealth,
+      asthma,
+      kidneyDisease,
+      skinCancer,
+      stroke,
+      BMI,
+      physicalHealth,
+      mentalHealth, 
+      sleepTime
+    )
+
+    res.status(201)
+  } catch {
+    res.status(500).json({ error: 'Error' });
+  }
+});
+
+router.put("/update-health-info", async (req, res) => {
+  try {
+    const updates = req.body
+    console.log("updates::")
+    console.log(updates.email)
+    await updateHealthInformation(updates.email, updates)
+    res.status(200)
+  } catch {
+    res.status(500).json({error: "Something wrong"})   
+  }
+})
+
+router.get("/get-health-info", async (req, res) => {
+  try {
+    const {email} = req.query
+    const result = await getHealthInformation(email)
+    if (result) {
+      res.status(200).json(result)
+    }
+    else {
+      res.status(404)
+    }
+    
+  }
+  catch {
+    res.status(500).json({error: "Something wrong"})
+  }
+})
 
 
 

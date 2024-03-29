@@ -39,7 +39,7 @@ const Login = () => {
         // console.log(response)
         // Add redirection logic or any other actions after successful login
         
-        sessionStorage.setItem('user', JSON.stringify(response.data.email))
+        sessionStorage.setItem('user', response.data.email)
 
         // update the auth context
         dispatch({type: 'LOGIN', payload: response.data.email})

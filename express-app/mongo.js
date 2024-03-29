@@ -1,7 +1,8 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const axios = require("axios");
 const uri =
-'mongodb+srv://sahusnai:YzhMRa0cjsrJEVhd@cluster0.nrkocdu.mongodb.net/';
+// 'mongodb+srv://sahusnai:YzhMRa0cjsrJEVhd@cluster0.nrkocdu.mongodb.net/';
+"mongodb+srv://mehta1:4Y8d1Y2uADwpzaWE@cluster0.w4dfpbc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -92,7 +93,7 @@ async function insertHealthInformation(
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("HealthInformation");
 
     const healthInfoDocument = {
@@ -230,16 +231,21 @@ async function updateHealthInformation(email, updates) {
     useUnifiedTopology: true,
   });
 
+
+
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("HealthInformation");
+    console.log("updates from mongo.js")
+    console.log(updates)
+
+    delete updates._id
 
     const filter = { email: email };
     const updateDoc = {
       $set: updates,
     };
-
     const result = await collection.updateOne(filter, updateDoc);
 
     if (result.matchedCount && result.modifiedCount) {
@@ -251,6 +257,38 @@ async function updateHealthInformation(email, updates) {
         "No matching document found or no new data provided to update."
       );
     }
+  
+  } catch (e) {console.log(e)}
+  finally {
+    await client.close();
+  }
+}
+
+async function getHealthInformation(email) {
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  try {
+    await client.connect();
+    const database = client.db("test");
+    const collection = database.collection("HealthInformation");
+    console.log(email)
+    const filter = { email: email };
+    const result = await collection.findOne(filter);
+    console.log(result)
+
+    if (result) {
+      console.log(`Found health information for patient with email: ${email}`);
+      return result;
+    } else {
+      console.log("No health information found for the specified email.");
+      return null; 
+    }
+  } catch (error) {
+    console.error("An error occurred while fetching health information:", error);
+    throw error; 
   } finally {
     await client.close();
   }
@@ -391,137 +429,7 @@ async function deleteFinancialInformation(email) {
   }
 }
 
-/*
-  // Example usage
-  const username = 'test2user';
-  const password = 'pass';
 
-  insertUser(username, password);
-
-  // Example usage for Health Information
-  const email = 'test2user';
-  const smoking = 'Never';
-  const alcoholConsumption = 'Occasional';
-  const sex = 'Female';
-  const age = 28;
-  const race = 'Asian';
-  const difficultyWalking = 'No';
-  const diabetic = 'No';
-  const physicalActivity = 'Regular';
-  const generalHealth = 'Good';
-  const asthma = 'No';
-  const kidneyDisease = 'No';
-  const skinCancer = 'No';
-  const stroke = 'No';
-  const heartDisease = 'No';
-  const BMI = 22.1;
-  const physicalhealth = 5;
-  const MentalHealth = 3;
-  const sleeptime = 6;
-
-  insertHealthInformation(
-    email,
-    smoking,
-    alcoholConsumption,
-    sex,
-    age,
-    race,
-    difficultyWalking,
-    diabetic,
-    physicalActivity,
-    generalHealth,
-    asthma,
-    kidneyDisease,
-    skinCancer,
-    stroke,
-    heartDisease,
-    BMI,
-    physicalhealth,
-    MentalHealth,
-    sleeptime
-  );
-
-  // Example usage for Financial Information
-  const income = 75000; // annual income in dollars
-  const savings = 15000; // savings in dollars
-  const investments = [
-    { type: 'Stocks', value: 20000 },
-    { type: 'Bonds', value: 5000 }
-  ];
-  const debt = 20000;
-
-  insertFinancialInformation(
-    email,
-    income,
-    savings,
-    investments,
-    debt
-  );
-
-const patientIdToUpdate = 'test2user';
-const healthUpdates = {
-  smoking: 'Occasionally',
-  generalHealth: 'Fair',
-  physicalActivity: 'None'
-};
-
-updateHealthInformation(patientIdToUpdate, healthUpdates);
-
-const patientIdToDelete = 'test2user';
-deleteHealthInformation(patientIdToDelete);
-*/
-
-const username = "yo";
-const password = "pass";
-
-insertUser(username, password);
-
-// Example usage for Health Information
-const email = "yo";
-const smoking = "No";
-const alcoholConsumption = "Yes";
-const sex = "Female";
-const age = 28;
-const race = "Asian";
-const difficultyWalking = "No";
-const diabetic = "No";
-const physicalActivity = "Yes";
-const generalHealth = "Good";
-const asthma = "No";
-const kidneyDisease = "No";
-const skinCancer = "No";
-const stroke = "No";
-const BMI = 22.1;
-const physicalhealth = 5;
-const MentalHealth = 3;
-const sleeptime = 6;
-
-insertHealthInformation(
-  email,
-  smoking,
-  alcoholConsumption,
-  sex,
-  age,
-  race,
-  difficultyWalking,
-  diabetic,
-  physicalActivity,
-  generalHealth,
-  asthma,
-  kidneyDisease,
-  skinCancer,
-  stroke,
-  BMI,
-  physicalhealth,
-  MentalHealth,
-  sleeptime
-);
-
-const income = 75000; // annual income in dollars
-const expense = 50000;
-const savings = 15000; // savings in dollars
-const investments = [{ type: "Stocks", value: 20000 }];
-const debt = 20000;
 
 module.exports = {
   run,
@@ -534,5 +442,6 @@ module.exports = {
   updateUserInformation,
   deleteUser,
   deleteHealthInformation,
-  deleteFinancialInformation
+  deleteFinancialInformation,
+  getHealthInformation
 };

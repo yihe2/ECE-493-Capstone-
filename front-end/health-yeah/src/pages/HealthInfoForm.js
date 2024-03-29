@@ -19,7 +19,6 @@ const HealthInfoForm = () => {
     asthma: '',
     kidneyDisease: '',
     skinCancer: '',
-    historyOfHeartDiseaseAndStroke: '',
     stroke: '',
     BMI: '18.5',
     physicalHealth: '',
@@ -52,38 +51,91 @@ const HealthInfoForm = () => {
     verifyUser();
   }, [])
 
-  // FROM CHAT
-  // useEffect(() => {
-  //   // Fetch data from Express endpoint
-    
-  //   fetch('/api/health-info')
-  //     .then(response => response.json())
-  //     .then(data => {
-  //       data.age = 69 // test
-  //       setFormData(data);
-  //     })
-  //     .catch(error => {
-  //       console.error('Error fetching health info:', error);
-  //     });
-  // }, []); // Empty dependency array ensures this effect runs only once on component mount
+
+
+  useEffect(() => {
+    const checkInfo = async () => {
+        const data = await axios.get(`http://localhost:3001/get-health-info?email=${sessionStorage.getItem("user")}`,
+        {
+          withCredentials: true,
+        }
+        );
+        console.log("data log:")
+        console.log(data.data)
+        if(data.status === 200) {
+          setFormData({
+            ...data.data
+          });
+        }
+        else {
+          console.log(data)
+        }
+  }
+    checkInfo();
+  }, [])
+
 
   const handleChange = (e) => {
     const { name, value } = e.target;
+
+    const email_string = sessionStorage.getItem("user")
     setFormData({
       ...formData,
-      [name]: value
+      [name]: value,
+      ["email"]: email_string
     });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+
+    const email_string = sessionStorage.getItem("user")
     setFormData({
       ...formData,
-      ["email"]: sessionStorage.getItem("user")
+      ["email"]: email_string
     });
     e.preventDefault();
 
 
+    // /insert-health-info
     console.log(formData);
+
+    try {
+      const get_response = await axios.get(`http://localhost:3001/get-health-info?email=${sessionStorage.getItem("user")}`,
+      {
+        withCredentials: true,
+      });
+      if (get_response.status === 200) {
+        // update
+        const response = await axios.put("http://127.0.0.1:3001/update-health-info", formData, {
+          withCredentials: true,
+        });
+
+        if (response.status === 200) {
+          console.log("success")
+        }
+        else {
+          console.log("something wrong")
+        }
+      }
+      else {
+        const response = await axios.post("http://127.0.0.1:3001/insert-health-info", formData, {
+          withCredentials: true,
+        });
+
+        if (response.status === 201) {
+          console.log(response);
+        }
+        else {
+          console.log("something wrong")
+        }
+    }
+
+    } catch (err) {
+      console.log(err);
+    }
+
+
+
   };
 
   return (
@@ -115,7 +167,7 @@ const HealthInfoForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="age">Age</label>
-            <input type="number" className="form-input w-full" id="age" name="age" min="1" defaultValue={formData.age} onChange={handleChange}/>
+            <input type="number" className="form-input w-full" id="age" name="age" min="1" value={formData.age} onChange={handleChange}/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="race">Race</label>
@@ -176,13 +228,6 @@ const HealthInfoForm = () => {
             </select> 
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="historyOfHeartDiseaseAndStroke">History of Heart Disease/Stroke</label>
-            <select className="form-select w-full" id="historyOfHeartDiseaseAndStroke" name="historyOfHeartDiseaseAndStroke" value={formData.historyOfHeartDiseaseAndStroke} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
-            </select> 
-          </div>
-          <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="stroke">Stroke</label>
             <select className="form-select w-full" id="stroke" name="stroke" value={formData.stroke} onChange={handleChange} required>
               <option value="1">Yes</option>
@@ -190,8 +235,8 @@ const HealthInfoForm = () => {
             </select> 
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="bmi">BMI</label>
-            <input type="number" step=".01" className="form-input w-full" id="bmi" name="bmi" min="1" defaultValue={formData.BMI} onChange={handleChange}/>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="BMI">BMI</label>
+            <input type="number" step=".01" className="form-input w-full" id="BMI" name="BMI" min="1" value={formData.BMI} onChange={handleChange}/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="physicalHealth">Physical Health</label>
@@ -209,7 +254,7 @@ const HealthInfoForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="sleepTime">Sleep Time</label>
-            <input type="number" className="form-input w-full" id="sleepTime" name="sleepTime" min="0" max="24" defaultValue={formData.sleepTime} onChange={handleChange}/>
+            <input type="number" className="form-input w-full" id="sleepTime" name="sleepTime" min="0" max="24" value={formData.sleepTime} onChange={handleChange}/>
           </div>
           <div className="mt-6">
             <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
