@@ -15,8 +15,7 @@ def hello_world():
 @app.route('/recieve/newuser', methods=['POST'])
 def receive_health():
     data = request.json
-    print(data)
-    print(model_interface.JSON_inperpreter(data))
+    print("THIS:" + str(model_interface.JSON_inperpreter(data)))
     send_data = {
         
     }

@@ -82,6 +82,7 @@ def JSON_inperpreter(data):
             if (new_risk_level <= score):
                 senddata["monthly_installment"] = -3
             else:
+                senddata["monthly_installment"] = -1
                 while (health_info_values[9] <=12):
                     health_info_values[9] += 1
                     score = risk_score_prediction(health_info_values)
@@ -89,15 +90,18 @@ def JSON_inperpreter(data):
                         print(score)
                         print(health_info_values[9])
                         asset = data["financial_information"]["savings"]
-                        senddata["monthly_installment"] = calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset)
-                        break  
-                if not senddata["monthly_installment"]:
-                    senddata["monthly_installment"] = -1
+                        income = data["financial_information"]["income"]
+                        expense = data["financial_information"]["expense"]
+                        stock = data["financial_information"]["investments"][0]["value"]
+                        debt = data["financial_information"]["debt"]
+                        senddata["years"] = (health_info_values[9] - age) * 4
+                        senddata["monthly_installment"] = calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset, income, expense, stock, debt)
+                        break
     response = requests.post(url, json=senddata)
 
 def risk_score_prediction (user_input):
 
-    rf_classifier_loaded = load('C:/Users/Yihe/Desktop/Mike/Homework/Need/ECE 493/Project #1/ECE-493-Capstone-/Disease Prediction Model/rf_classifier.joblib')
+    rf_classifier_loaded = load('rf_classifier.joblib')
 
     feature_names = ['BMI', 'PhysicalHealth', 'MentalHealth', 'SleepTime',
         'Smoking_encoded', 'AlcoholDrinking_encoded', 'Stroke_encoded',
@@ -117,14 +121,38 @@ def risk_score_prediction (user_input):
     probability = rf_classifier_loaded.predict_proba(user_input_df)
     return probability[0][1]
 
-def calculate_monthly_contribution(years, saving_goal, total_asset, inflation_rate=0.05, interest_rate = 0.02):
+def calculate_monthly_contribution(years, saving_goal, total_asset, annual_income, annual_expense, stock_value, debt, inflation_rate=0.03, interest_rate=0.02, stock_rate=0.05):
     months = years * 12
     monthly_rate = (1 + inflation_rate) ** (1/12) - 1
-    future_value_goal = saving_goal * ((1 + inflation_rate) ** years)
-    future_value_asset = total_asset * ((1 + interest_rate) ** years)
+    
+    # Inflate debt annually by the inflation rate
+    inflated_debt = debt * ((1 + inflation_rate) ** years)
+
+    # Calculate net annual savings
+    net_annual_savings = annual_income - annual_expense
+
+    # Adjust total_asset and inflated_debt for each year with net annual savings, interest, and attempt to pay off the debt
+    for year in range(1, years + 1):
+        # Try to pay off the debt with this year's savings first
+        if net_annual_savings >= inflated_debt:
+            net_annual_savings -= inflated_debt  # Deduct the debt from savings
+            inflated_debt = 0  # Debt is paid off
+        else:
+            inflated_debt -= net_annual_savings  # Reduce the debt by the amount of savings
+            net_annual_savings = 0  # All savings go towards debt repayment
+
+        total_asset += net_annual_savings  # Add remaining net savings (if any) to total assets
+        total_asset *= (1 + interest_rate)  # Apply interest for the year
+        inflated_debt *= (1 + inflation_rate)  # Inflate the remaining debt
+
+    # If there's still debt left after all years, add it to the saving goal
+    future_value_goal = (saving_goal + inflated_debt) * ((1 + inflation_rate) ** years)
+    future_value_stock = stock_value * ((1 + stock_rate) ** years)
+    
+    future_value_asset = total_asset + future_value_stock
     
     if future_value_asset >= future_value_goal:
-        return -2
+        return -2  # Indicating that the saving goal is already met or exceeded with the current assets and savings plan
     else:
         deficit = future_value_goal - future_value_asset
         if monthly_rate != 0:

@@ -4,7 +4,7 @@ const jwt = require("jsonwebtoken");
 const maxAge = 3*24*60*60; // 3 days
 
 const createToken = (id) => {
-    return jwt.sign({id}, "secret key", {
+    return jwt.sign({id}, "secret key", { // TODO: Change Secret KEY
       expiresIn: maxAge,
     });
   };
@@ -40,16 +40,17 @@ module.exports.register = async (req, res, next) => {
       const user = await User.create({ email, password });
       const token = createToken(user._id);
   
-      res.cookie("jwt", token, {
-        withCredentials: true,
-        // path: '/',
-        httpOnly: false,
-        maxAge: maxAge * 1000,
-        sameSite: "None"
-        // secure: true
-      })
+      // res.cookie("jwt", token, {
+      //   withCredentials: true,
+      //   // path: '/',
+      //   httpOnly: false,
+      //   maxAge: maxAge * 1000,
+      //   sameSite: "None"
+      //   // secure: true
+      // })
       
-      res.status(201).json({ user: user._id, created: true });
+      // res.status(201).json({ user: user._id, created: true });
+      res.status(200).json({email ,token})
     } catch (err) {
       console.log(err);
       const errors = handleErrors(err);
@@ -74,7 +75,10 @@ module.exports.log_in = async (req, res, next) => {
         });
         // console.log(test)
         // console.log("pushing cookie")
-        res.status(200).json({ user: user._id, created: true });
+
+        
+        // res.status(200).json({ user: user._id, created: true });
+        res.status(200).json({email ,token})
         next();
       } catch (err) {
         console.log(err);

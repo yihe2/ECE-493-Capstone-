@@ -127,6 +127,7 @@ async function insertHealthInformation(
 async function insertFinancialInformation(
   email,
   income,
+  expense,
   savings,
   investments,
   debt
@@ -144,6 +145,7 @@ async function insertFinancialInformation(
     const financialInfoDocument = {
       email: email,
       income: income,
+      expense: expense,
       savings: savings,
       investments: investments,
       debt: debt,
@@ -154,7 +156,7 @@ async function insertFinancialInformation(
   } finally {
     await client.close();
   }
-  sendNewUser(email, 0);
+  sendNewUser(email, 1);
 }
 
 // Send to backend using this
@@ -203,7 +205,7 @@ async function sendNewUser(email, mode) {
         SkinCancer: health.skinCancer,
       },
       financial_information: financial,
-      future_risk_level: 0.0,
+      future_risk_level: 0.25,
     };
 
     delete doc.financial_information._id;
@@ -516,14 +518,10 @@ insertHealthInformation(
 );
 
 const income = 75000; // annual income in dollars
+const expense = 50000;
 const savings = 15000; // savings in dollars
-const investments = [
-  { type: "Stocks", value: 20000 },
-  { type: "Bonds", value: 5000 },
-];
+const investments = [{ type: "Stocks", value: 20000 }];
 const debt = 20000;
-
-insertFinancialInformation(email, income, savings, investments, debt);
 
 module.exports = {
   run,
