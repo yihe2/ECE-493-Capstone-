@@ -1,7 +1,7 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const axios = require("axios");
 const uri =
-  "mongodb+srv://yihe2:9QxflzGsaYed6NDj@cluster0.v71zvam.mongodb.net/";
+'mongodb+srv://sahusnai:YzhMRa0cjsrJEVhd@cluster0.nrkocdu.mongodb.net/';
 // Create a MongoClient with a MongoClientOptions object to set the Stable API version
 const client = new MongoClient(uri, {
   serverApi: {
@@ -523,4 +523,16 @@ const savings = 15000; // savings in dollars
 const investments = [{ type: "Stocks", value: 20000 }];
 const debt = 20000;
 
-insertFinancialInformation(email, income, expense, savings, investments, debt);
+module.exports = {
+  run,
+  insertUser,
+  insertHealthInformation,
+  insertFinancialInformation,
+  sendNewUser,
+  updateHealthInformation,
+  updateFinancialInformation,
+  updateUserInformation,
+  deleteUser,
+  deleteHealthInformation,
+  deleteFinancialInformation
+};
