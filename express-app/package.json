@@ -21,6 +21,7 @@
     "jest": "^29.7.0",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.5.0",
+    "mongodb-memory-server": "^9.1.7",
     "mongoose": "^8.2.2",
     "nodemon": "^3.1.0",
     "supertest": "^6.3.4"
