@@ -1,4 +1,4 @@
-const { register, log_in } = require("../controllers/AuthControllers");
+const { register, log_in, changePassword } = require("../controllers/AuthControllers");
 const { checkUser } = require("../middleware/authMiddleware");
 const router = require("express").Router();
 const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation } = require("../mongo");
@@ -10,6 +10,7 @@ router.get('/', (req, res) => {
 
 router.post('/create-account', register);
 router.post("/login", log_in);
+router.put("/change-password", changePassword);
 router.post("/secret", checkUser)
 router.post("/insert-health-info",  async (req, res) => {
   try {

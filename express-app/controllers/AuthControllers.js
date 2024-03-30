@@ -88,3 +88,21 @@ module.exports.log_in = async (req, res, next) => {
         next();
       }
 };
+
+module.exports.changePassword = async (req, res, next) => {
+  try {
+    
+    const { email, password, newPassword } = req.body.password_data;
+    console.log("New Password::")
+    console.log(newPassword)
+    const user = await User.changePassword(email, password, newPassword);
+    res.status(200).json({email})
+    next();
+  } catch (err) {
+    console.log(err);
+    const errors = handleErrors(err);
+    res.status
+    res.status(401).json({ errors, created: false });
+    next();
+  }
+};

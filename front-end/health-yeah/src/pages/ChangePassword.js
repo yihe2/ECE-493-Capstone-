@@ -14,7 +14,6 @@ const ChangePassword = () => {
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
-        console.log("no cookie initial check")
         navigate("/login");
       }
       else {
@@ -48,8 +47,14 @@ const ChangePassword = () => {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
+    const password_data = {
+      email: sessionStorage.getItem("user"),
+      password: currentPassword,
+      newPassword: newPassword
+    }
     // Perform validation
     if (!currentPassword || !newPassword || !confirmPassword) {
       setErrorMessage('Please fill in all fields');
@@ -62,6 +67,18 @@ const ChangePassword = () => {
     // Implement password change logic here
     console.log('Password change submitted');
     // Reset form fields
+
+    
+    try {
+      const data = await axios.put("http://localhost:3001/change-password", {password_data},
+        {
+          withCredentials: true,
+        });
+    } catch (e){
+      console.log(e)
+    }
+
+
     setCurrentPassword('');
     setNewPassword('');
     setConfirmPassword('');
