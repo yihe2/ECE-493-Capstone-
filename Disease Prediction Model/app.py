@@ -15,11 +15,11 @@ def hello_world():
 @app.route('/recieve/newuser', methods=['POST'])
 def receive_health():
     data = request.json
-    print("THIS:" + str(model_interface.JSON_inperpreter(data)))
-    send_data = {
-        
-    }
-    return jsonify({'status':'success'}), 201
+    return_json = model_interface.JSON_inperpreter(data)
+    print("THIS vv")
+    print(return_json)
+
+    return jsonify(return_json), 201
 
 # Run the Flask application
 if __name__ == '__main__':

@@ -1,8 +1,8 @@
 const { register, log_in, changePassword } = require("../controllers/AuthControllers");
 const { checkUser } = require("../middleware/authMiddleware");
 const router = require("express").Router();
-const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation } = require("../mongo");
-
+const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation, sendNewUser } = require("../mongo");
+const myEmitter = require("../emitter.js")
 
 router.get('/', (req, res) => {
     res.send('Poppin here');
@@ -150,6 +150,28 @@ router.get("/get-fin-info", async (req, res) => {
     res.status(500).json({error: "Something wrong"})
   }
 })
+
+router.get("/score-predict", async (req, res) => {
+  try {
+    const {email, mode} = req.query
+    console.log(email)
+    console.log(mode)
+    const result = await sendNewUser(email, mode)
+    console.log("result from score-predict")
+    console.log(result)
+    res.status(200).json(result)
+
+  } catch (e){
+    console.log(e)
+    res.status(500).json({error: e})
+  }
+})
+
+// app.post("/user/info", (req, res) => {
+//   const info = req.body;
+//   console.log(info);
+//   res.json({ status: "success" });
+// });
 
 
 

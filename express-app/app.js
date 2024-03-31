@@ -6,6 +6,7 @@ const app = express();
 const port = 3001;
 const authRoutes = require("./Routes/AuthRoutes.js");
 const cookieParser = require("cookie-parser")
+const myEmitter = require("./emitter.js")
 
 app.use(express.json());
 
@@ -30,11 +31,12 @@ app.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-app.post("/user/info", (req, res) => {
-  const info = req.body;
-  console.log(info);
-  res.json({ status: "success" });
-});
+// app.post("/user/info", (req, res) => {
+//   const info = req.body;
+//   myEmitter.emit("prediction data", info);
+//   console.log(info);
+//   res.json({ status: "success" });
+// });
 
 // app.delete('/delete-account', async (req, res) => {
 //   try {

@@ -31,6 +31,42 @@ const Home = () => {
     verifyUser();
   }, [])
 
+
+  const handleSubmit = async () => {
+    console.log("Call to Prediction::")
+    const email = sessionStorage.getItem("user");
+
+    try {
+      const health_data = await axios.get(`http://localhost:3001/get-health-info?email=${email}`,
+      {
+        withCredentials: true,
+      });
+
+
+      const fin_data = await axios.get(`http://localhost:3001/get-fin-info?email=${email}`,
+      {
+        withCredentials: true,
+      });
+
+
+      if(fin_data.status === 200 && health_data.status === 200) {
+        console.log("reached")
+        const data = await axios.get(`http://localhost:3001/score-predict?email=${email}&mode=0`,
+        {
+          withCredentials: true,
+        });
+        console.log(data)
+      }
+      else {
+        // SOME ERROR DISPLAY
+      }
+    } catch (e) {
+      console.error(e);
+    }
+
+
+  }
+
   return (
     <>
         <Navbar />
@@ -40,7 +76,7 @@ const Home = () => {
             <p className="text-gray-700 mb-4">
             Something Something
             </p>
-            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSubmit}>
             Get Started
             </button>
         </div>

@@ -1,5 +1,6 @@
 const { MongoClient, ServerApiVersion } = require("mongodb");
 const axios = require("axios");
+const { response } = require("express");
 const uri =
 // 'mongodb+srv://sahusnai:YzhMRa0cjsrJEVhd@cluster0.nrkocdu.mongodb.net/';
 "mongodb+srv://mehta1:4Y8d1Y2uADwpzaWE@cluster0.w4dfpbc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";
@@ -133,11 +134,12 @@ async function sendNewUser(email, mode) {
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const healthCollection = database.collection("HealthInformation");
     const financialCollection = database.collection("FinancialInformation");
 
     const health = await healthCollection.findOne({ email: email });
+    console.log(email)
     if (!health) {
       throw new Error("Health information not found for this email.");
     }
@@ -180,7 +182,9 @@ async function sendNewUser(email, mode) {
         "http://127.0.0.1:5000/recieve/newuser",
         doc
       );
+      console.log("from newuser func")
       console.log(response.data);
+      return response.data
     } catch (error) {
       console.error(error);
     }

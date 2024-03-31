@@ -41,18 +41,18 @@ def JSON_health_encoder(json_data):
                 # Convert age into corresponding category code
                 for range_key, code in mappings[key].items():
                     if range_key == '80 or older':
-                        if value >= 80:
+                        if int(value) >= 80:
                             encoded_array.append(code)
                             break
                     else:
                         age_range = range_key.split('-')
-                        if int(age_range[0]) <= value <= int(age_range[1]):
+                        if int(age_range[0]) <= int(value) <= int(age_range[1]):
                             encoded_array.append(code)
                             break
             else:
                 encoded_array.append(mappings[key].get(value, 'Unknown'))
         else:
-            encoded_array.append(value)
+            encoded_array.append(int(value))
     
     return encoded_array
 
@@ -61,7 +61,7 @@ def JSON_inperpreter(data):
     # with open(file_path, 'w') as file:
     #     json.dump(data, file)
     # Extracting mode
-    mode = data["mode"]
+    mode = int(data["mode"])
     email = data["email"]
     
     health_info_values = JSON_health_encoder(data)
@@ -89,15 +89,16 @@ def JSON_inperpreter(data):
                     if (score >= new_risk_level):
                         print(score)
                         print(health_info_values[9])
-                        asset = data["financial_information"]["savings"]
-                        income = data["financial_information"]["income"]
-                        expense = data["financial_information"]["expense"]
-                        stock = data["financial_information"]["investments"][0]["value"]
-                        debt = data["financial_information"]["debt"]
+                        asset = float(data["financial_information"]["savings"])
+                        income = float(data["financial_information"]["income"])
+                        expense = float(data["financial_information"]["expense"])
+                        stock = float(data["financial_information"]["investments"][0]["value"])
+                        debt = float(data["financial_information"]["debt"])
                         senddata["years"] = (health_info_values[9] - age) * 4
                         senddata["monthly_installment"] = calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset, income, expense, stock, debt)
                         break
-    response = requests.post(url, json=senddata)
+    return senddata
+    # response = requests.post(url, json=senddata)
 
 def risk_score_prediction (user_input):
 
