@@ -21,8 +21,8 @@ const HealthInfoForm = () => {
     skinCancer: 'No',
     stroke: 'No',
     BMI: '18.5',
-    physicalHealth: 'Excellent',
-    mentalHealth: 'Excellent',
+    physicalHealth: '15',
+    mentalHealth: '15',
     sleepTime: '8',
   });
 
@@ -143,15 +143,15 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="smoking">Smoking</label>
             <select className="form-select w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="alcoholConsumption">Alcohol Consumption</label>
             <select className="form-select w-full" id="alcoholConsumption" name="alcoholConsumption" value={formData.alcoholConsumption} onChange={handleChange}>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select>
           </div>
           <div className="mb-4">
@@ -163,21 +163,25 @@ const HealthInfoForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="age">Age</label>
-            <input type="number" className="form-input w-full" id="age" name="age" min="1" value={formData.age} onChange={handleChange}/>
+            <input type="number" className="form-input w-full" id="age" name="age" min="1" max='100' value={formData.age} onChange={handleChange}/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="race">Race</label>
             <select className="form-select w-full" id="race" name="race" value={formData.race} onChange={handleChange}>
-            <option value="">Select</option>
-              <option value="...">...</option>
-              <option value="...">...</option>
+              {/* {'American Indian/Alaskan Native': 0, 'Asian': 1, 'Black': 2, 'Hispanic': 3, 'Other': 4, 'White': 5} */}
+              <option value="American Indian/Alaskan Native">American Indian/Alaskan Native</option>
+              <option value="Asian">Asian</option>
+              <option value="Black">Black</option>
+              <option value="Hispanic">Hispanic</option>
+              <option value="Other">Other</option>
+              <option value="White">White</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="difficultyWalking">Difficulting Walking</label>
             <select className="form-select w-full" id="difficultyWalking" name="difficultyWalking" value={formData.difficultyWalking} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
@@ -186,34 +190,39 @@ const HealthInfoForm = () => {
               <option value="Yes (during pregnancy)">Yes (During Pregnancy)</option>
               <option value="Yes">Yes</option>
               <option value="No">No</option>
+              <option value="No, borderline diabetes">No, borderline diabetes</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="physicalActivity">Physical Activity</label>
             <select className="form-select w-full" id="physicalActivity" name="physicalActivity" value={formData.physicalActivity} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="generalHealth">General Health</label>
             <select className="form-select w-full" id="generalHealth" name="generalHealth" value={formData.generalHealth} onChange={handleChange} required>
-              <option value="...">...</option>
-              <option value="wowo">test</option>
+              {/* {'Excellent': 0, 'Fair': 1, 'Good': 2, 'Poor': 3, 'Very good': 4} */}
+              <option value="Excellent">Excellent</option>
+              <option value="Very good">Very Good</option>
+              <option value="Good">Good</option>
+              <option value="Fair">Fair</option>
+              <option value="Poor">Poor</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="asthma">Asthma</label>
             <select className="form-select w-full" id="asthma" name="asthma" value={formData.asthma} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="kidneyDisease">Kidney Disease</label>
             <select className="form-select w-full" id="kidneyDisease" name="kidneyDisease" value={formData.kidneyDisease} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
@@ -236,17 +245,11 @@ const HealthInfoForm = () => {
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="physicalHealth">Physical Health</label>
-            <select className="form-select w-full" id="physicalHealth" name="physicalHealth" value={formData.physicalHealth} onChange={handleChange} required>
-              <option value="...">...</option>
-              <option value="...">...</option>
-            </select> 
+            <input type="number" step=".01" className="form-input w-full" id="physicalHealth" name="physicalHealth" min="0" max="30" value={formData.physicalHealth} onChange={handleChange}/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="mentalHealth">Mental Health</label>
-            <select className="form-select w-full" id="mentalHealth" name="mentalHealth" value={formData.mentalHealth} onChange={handleChange} required>
-              <option value="...">...</option>
-              <option value="...">...</option>
-            </select> 
+            <input type="number" step=".01" className="form-input w-full" id="mentalHealth" name="mentalHealth" min="0" max="30" value={formData.mentalHealth} onChange={handleChange}/>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="sleepTime">Sleep Time</label>

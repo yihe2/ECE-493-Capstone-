@@ -30,11 +30,12 @@ app.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-app.post("/user/info", (req, res) => {
-  const info = req.body;
-  console.log(info);
-  res.json({ status: "success" });
-});
+// app.post("/user/info", (req, res) => {
+//   const info = req.body;
+//   myEmitter.emit("prediction data", info);
+//   console.log(info);
+//   res.json({ status: "success" });
+// });
 
 // app.delete('/delete-account', async (req, res) => {
 //   try {
