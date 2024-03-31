@@ -6,7 +6,6 @@ const app = express();
 const port = 3001;
 const authRoutes = require("./Routes/AuthRoutes.js");
 const cookieParser = require("cookie-parser")
-const myEmitter = require("./emitter.js")
 
 app.use(express.json());
 

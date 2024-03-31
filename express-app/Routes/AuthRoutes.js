@@ -2,7 +2,6 @@ const { register, log_in, changePassword } = require("../controllers/AuthControl
 const { checkUser } = require("../middleware/authMiddleware");
 const router = require("express").Router();
 const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation, sendNewUser } = require("../mongo");
-const myEmitter = require("../emitter.js")
 
 router.get('/', (req, res) => {
     res.send('Poppin here');
