@@ -10,7 +10,6 @@ logs/
 npm-debug.log*
 
 # Ignore development dependencies
-**/test/
 **/tests/
 **/.eslintrc
 **/.eslintignore
