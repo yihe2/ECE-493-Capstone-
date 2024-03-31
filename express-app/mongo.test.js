@@ -74,4 +74,42 @@ describe('Mongooperations', () => {
         expect(deletedUser).toBeFalsy();
       });
 
-  });
+      // Get user Test
+      it('should fetch health information for a user', async () => {
+        const healthInfo = await getHealthInformation('test@example.com');
+        expect(healthInfo).toBeTruthy();
+        expect(healthInfo.email).toBe('test@example.com');
+    }, 10000);
+
+    // Update Financial Test
+    it('should update financial information in collection', async () => {
+        const updates = { savings: 20000 };
+        await updateFinancialInformation('test@example.com', updates);
+        const updatedFinancialInfo = await db.collection('FinancialInformation').findOne({ email: 'test@example.com' });
+        expect(updatedFinancialInfo).toBeTruthy();
+        expect(updatedFinancialInfo.savings).toBe(updates.savings);
+    }, 10000);
+
+    // Update User
+    it('should update user information in collection', async () => {
+        const updates = { password: 'newpassword123' };
+        await updateUserInformation('test@example.com', updates);
+        const updatedUserInfo = await db.collection('users').findOne({ email: 'test@example.com' });
+        expect(updatedUserInfo).toBeTruthy();
+        expect(updatedUserInfo.password).toBe(updates.password);
+    }, 10000);
+
+    // Delete Health
+    it('should delete health information from collection', async () => {
+        await deleteHealthInformation('test@example.com');
+        const deletedHealthInfo = await db.collection('HealthInformation').findOne({ email: 'test@example.com' });
+        expect(deletedHealthInfo).toBeFalsy();
+    }, 10000);
+
+    // Delete Financial
+    it('should delete financial information from collection', async () => {
+        await deleteFinancialInformation('test@example.com');
+        const deletedFinancialInfo = await db.collection('FinancialInformation').findOne({ email: 'test@example.com' });
+        expect(deletedFinancialInfo).toBeFalsy();
+    }, 10000);
+});
