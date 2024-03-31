@@ -7,22 +7,22 @@ const HealthInfoForm = () => {
   const navigate = useNavigate();
   const [formData, setFormData] = useState({
     email: '',
-    smoking: 'Yes',
-    alcoholConsumption: 'Yes',
+    smoking: 'No',
+    alcoholConsumption: 'No',
     sex: 'Male',
     age: '18',
-    race: '...',
-    difficultyWalking: '',
-    diabetic: '',
-    physicalActivity: '',
-    generalHealth: '',
-    asthma: '',
-    kidneyDisease: '',
-    skinCancer: '',
-    stroke: '',
+    race: 'Other',
+    difficultyWalking: 'No',
+    diabetic: 'No',
+    physicalActivity: 'Yes',
+    generalHealth: 'Excellent',
+    asthma: 'No',
+    kidneyDisease: 'No',
+    skinCancer: 'No',
+    stroke: 'No',
     BMI: '18.5',
-    physicalHealth: '',
-    mentalHealth: '',
+    physicalHealth: 'Excellent',
+    mentalHealth: 'Excellent',
     sleepTime: '8',
   });
 
@@ -30,7 +30,6 @@ const HealthInfoForm = () => {
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
-        console.log("no cookie initial check")
         navigate("/login");
       }
       else {
@@ -133,9 +132,6 @@ const HealthInfoForm = () => {
     } catch (err) {
       console.log(err);
     }
-
-
-
   };
 
   return (
@@ -187,9 +183,9 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="diabetic">Diabetic</label>
             <select className="form-select w-full" id="diabetic" name="diabetic" value={formData.diabetic} onChange={handleChange} required>
-              <option value="2">Yes When Pregnant</option>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes (during pregnancy)">Yes (During Pregnancy)</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
