@@ -6,6 +6,7 @@ import SecretTest from "./pages/SecretTest"
 import HealthInfoForm from './pages/HealthInfoForm';
 import FinInfoForm from './pages/FinInfoForm';
 import ChangePassword from './pages/ChangePassword';
+import DeleteAccount from './pages/DeleteAccount';
 
 
 
@@ -34,6 +35,7 @@ const App = () => {
         <Route path="/fininfo" element= {<FinInfoForm />}/>
         <Route path="/change-password" element= {<ChangePassword />}/>
         <Route path="/information" element= {<InformationPage />}/>
+        <Route path="/delete-account" element= {<DeleteAccount />}/>
       </Routes>
     </BrowserRouter>
   );
