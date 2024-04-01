@@ -26,7 +26,7 @@ const Navbar = () => {
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">
-              <button
+                <button
                   onClick={() => navigate("/")}
                   className={`text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${
                     selectedTab === 'Home' && 'bg-gray-900 text-white'
@@ -57,6 +57,14 @@ const Navbar = () => {
                   }`}
                 >
                   Change Password
+                </button>
+                <button
+                  onClick={() => navigate("/delete-account")}
+                  className={`text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium ${
+                    selectedTab === 'Delete Account' && 'bg-gray-900 text-white'
+                  }`}
+                >
+                  Delete Account
                 </button>
               </div>
             </div>

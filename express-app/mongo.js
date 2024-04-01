@@ -362,7 +362,7 @@ async function deleteUser(email) {
   try {
     await client.connect();
 
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("users");
 
     const result = await collection.deleteOne({ email: email });
@@ -374,6 +374,9 @@ async function deleteUser(email) {
       console.log("User not found or deletion failed.");
       return false;
     }
+  } catch (e) {
+    console.error(e)
+    throw e;
   } finally {
     await client.close();
   }
@@ -387,7 +390,7 @@ async function deleteHealthInformation(email) {
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("HealthInformation");
 
     const result = await collection.deleteOne({ email: email });
@@ -412,7 +415,7 @@ async function deleteFinancialInformation(email) {
 
   try {
     await client.connect();
-    const database = client.db("test2");
+    const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
     const result = await collection.deleteOne({ email: email });
@@ -424,6 +427,57 @@ async function deleteFinancialInformation(email) {
     } else {
       console.log("No financial information found with that ID.");
     }
+  } finally {
+    await client.close();
+  }
+}
+
+async function deleteAllInformation(email) {
+  const client = new MongoClient(uri, {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+  });
+
+  try {
+    await client.connect();
+    const database = client.db("test");
+    const healthCollection = database.collection("HealthInformation");
+    const financialCollection = database.collection("FinancialInformation");
+    const accCollection = database.collection("users");
+
+    
+    const healthResult = await healthCollection.deleteOne({ email: email });
+    const finResult = await financialCollection.deleteOne({ email: email });
+    const accResult = await accCollection.deleteOne({ email: email });
+
+    if (healthResult.deletedCount === 1) {
+      console.log(
+        `Successfully deleted the health information for user with ID: ${email}`
+      );
+    } else {
+      console.log("No health information found with that ID.");
+    }
+
+    if (finResult.deletedCount === 1) {
+      console.log(
+        `Successfully deleted the financial information for user with ID: ${email}`
+      );
+    } else {
+      console.log("No financial information found with that ID.");
+    }
+
+    if (accResult.deletedCount === 1) {
+      console.log(
+        `Successfully deleted the user information for user with ID: ${email}`
+      );
+    } else {
+      console.log("No user information found with that ID.");
+    }
+
+
+  } catch (e) {
+    console.error(e)
+    throw e;
   } finally {
     await client.close();
   }
@@ -442,6 +496,7 @@ module.exports = {
   deleteUser,
   deleteHealthInformation,
   deleteFinancialInformation,
+  deleteAllInformation,
   getHealthInformation,
   getFinancialInformation
 };
