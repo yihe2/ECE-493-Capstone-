@@ -1,7 +1,7 @@
 const { register, log_in, changePassword } = require("../controllers/AuthControllers");
 const { checkUser } = require("../middleware/authMiddleware");
 const router = require("express").Router();
-const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation, sendNewUser } = require("../mongo");
+const { insertHealthInformation, updateHealthInformation, getHealthInformation, insertFinancialInformation, updateFinancialInformation, getFinancialInformation, sendNewUser, deleteUser, deleteAllInformation } = require("../mongo");
 
 router.get('/', (req, res) => {
     res.send('Poppin here');
@@ -166,12 +166,25 @@ router.get("/score-predict", async (req, res) => {
   }
 })
 
-// app.post("/user/info", (req, res) => {
-//   const info = req.body;
-//   console.log(info);
-//   res.json({ status: "success" });
-// });
+router.put("/delete-user", async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await deleteUser(data.email);
+    res.status(200).json(result)
+  } catch (e) {
+    res.status(500).json({error: e})
+  }
+});
 
+router.put("/delete-all", async (req, res) => {
+  try {
+    const data = req.body;
+    const result = await deleteAllInformation(data.email);
+    res.status(200).json(result)
+  } catch (e) {
+    res.status(500).json({error: e})
+  }
+});
 
 
 router.post("/testpost", async (req, res) => {

@@ -31,38 +31,50 @@ const DeleteAccount = () => {
     verifyUser();
   }, [])
 
-  const handleDeleteAccount = () => {
+  const handleDeleteAccount = async () => {
     // Logic to delete account
     console.log('Account deleted');
-
-
-
-    // send email??
-    sessionStorage.removeItem("user")
-    navigate("/login");
-
+    const email = sessionStorage.getItem("user");
     try {
+      const response = await axios.put("http://127.0.0.1:3001/delete-user", {email: email}, {
+        withCredentials: true,
+      });
+
+      if (response.status === 200) {
+        console.log("successful delete??")
+        sessionStorage.removeItem("user")
+        navigate("/login");
+      }
+      else {
+        console.log("something wrong")
+      }
 
     } catch (e) {
-
-
-      // send email??
-      sessionStorage.removeItem("user")
-      navigate("/login");
+      console.error(e)
     }
 
 
   };
 
-  const handleDeleteAccountWithInfo = () => {
+  const handleDeleteAccountWithInfo = async () => {
     // Logic to delete account along with information
     console.log('Account and information deleted');
-
-
+    const email = sessionStorage.getItem("user");
     try {
+      const response = await axios.put("http://127.0.0.1:3001/delete-all", {email: email}, {
+        withCredentials: true,
+      });
 
+      if (response.status === 200) {
+        console.log("successful delete??")
+        sessionStorage.removeItem("user")
+        navigate("/login");
+      }
+      else {
+        console.log("something wrong")
+      }
     } catch (e) {
-
+      console.error(e)
     }
   };
 
