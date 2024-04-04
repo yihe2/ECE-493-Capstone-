@@ -152,10 +152,11 @@ router.get("/get-fin-info", async (req, res) => {
 
 router.get("/score-predict", async (req, res) => {
   try {
-    const {email, mode} = req.query
+    const {email, riskLevel, mode} = req.query
     console.log(email)
     console.log(mode)
-    const result = await sendNewUser(email, mode)
+    console.log(riskLevel)
+    const result = await sendNewUser(email, riskLevel, mode)
     console.log("result from score-predict")
     console.log(result)
     res.status(200).json(result)

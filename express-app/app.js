@@ -31,22 +31,6 @@ app.get("/", (req, res) => {
   res.send("Hello, Express!");
 });
 
-// app.post("/user/info", (req, res) => {
-//   const info = req.body;
-//   myEmitter.emit("prediction data", info);
-//   console.log(info);
-//   res.json({ status: "success" });
-// });
-
-// app.delete('/delete-account', async (req, res) => {
-//   try {
-//     // delete functionality
-//   }
-//   catch (error) {
-//     console.error(error);
-//     res.status(500).json({ error: 'Internal Server Error' }); 
-//   }
-// });
 
 // Start the server
 server = app.listen(port, () => {
@@ -55,7 +39,6 @@ server = app.listen(port, () => {
 
 
 module.exports = {app, server};
-
 
 
 const uri = "mongodb+srv://mehta1:4Y8d1Y2uADwpzaWE@cluster0.w4dfpbc.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0";

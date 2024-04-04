@@ -126,7 +126,7 @@ async function insertFinancialInformation(
 }
 
 // Send to backend using this
-async function sendNewUser(email, mode) {
+async function sendNewUser(email, riskLevel, mode) {
   const client = new MongoClient(uri, {
     useNewUrlParser: true,
     useUnifiedTopology: true,
@@ -172,7 +172,8 @@ async function sendNewUser(email, mode) {
         SkinCancer: health.skinCancer,
       },
       financial_information: financial,
-      future_risk_level: 0.25,
+      future_risk_level: parseFloat(riskLevel), 
+      // TODO: Change the risk level to allow info from function call
     };
 
     delete doc.financial_information._id;
