@@ -1,12 +1,14 @@
 // Home.js
 
-import React, { useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
 const Home = () => {
   const navigate = useNavigate();
+  const [showScore, setShowScore] = useState(false);
+  const [prediction, setPrediction] = useState('');
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -56,6 +58,17 @@ const Home = () => {
           withCredentials: true,
         });
         console.log(data)
+
+        if(data.status === 200) {
+          console.log("in the 200")
+          setShowScore(true)
+          setPrediction(`${data.data.score.toFixed(5)} on a scale of 0 to 1.`)
+        }
+        else {
+          setShowScore(true)
+          setPrediction("Something Went Wrong")
+        }
+
       }
       else {
         // SOME ERROR DISPLAY
@@ -69,18 +82,43 @@ const Home = () => {
 
   return (
     <>
-        <Navbar />
-        <div className="bg-gray-100 min-h-screen flex justify-center items-center">
-        <div className="max-w-lg p-8 bg-white shadow-lg rounded-lg">
-            <h1 className="text-3xl font-bold mb-4">Prediction</h1>
+      <Navbar />
+      <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
+        <div className="max-w-lg p-8 bg-white shadow-lg rounded-lg mb-4">
+            <h1 className="text-3xl font-bold mb-4">Health Score Prediction</h1>
             <p className="text-gray-700 mb-4">
-            Something Something
+              Click the button below to calculate your cardiovascular risk level!
             </p>
+            {showScore ? (
+              <>
+              <p>Based on your health factors, our model has determined your risk level to be: </p>
+              <p className='text-gray-700 mb-4'>{prediction}</p>
+              </>
+            ) : (
+              <></>
+            )}
             <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={handleSubmit}>
-            Get Started
+              Get Risk
             </button>
         </div>
+        <div className="max-w-lg p-8 bg-white shadow-lg rounded-lg mt-4">
+            <h1 className="text-3xl font-bold mb-4">Financial Plan</h1>
+            <p className="text-gray-700 mb-4">
+              Click the button below to calculate your cardiovascular risk level!
+            </p>
+            {showScore ? (
+              <>
+              <p>Based on your health factors, our model has determined your risk level to be: </p>
+              <p className='text-gray-700 mb-4'>{prediction}</p>
+              </>
+            ) : (
+              <></>
+            )}
+            <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" onClick={() => {}}>
+              Get Budget
+            </button>
         </div>
+      </div>
     </>
   );
 };
