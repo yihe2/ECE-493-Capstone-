@@ -71,7 +71,7 @@ const Login = () => {
             Username
           </label>
           <input
-            type="text"
+            type="email"
             id="username"
             className="w-full p-2 border border-gray-300 rounded"
             placeholder="Enter your username"
