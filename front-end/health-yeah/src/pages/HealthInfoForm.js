@@ -228,15 +228,15 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="skinCancer">Skin Cancer</label>
             <select className="form-select w-full" id="skinCancer" name="skinCancer" value={formData.skinCancer} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="stroke">Stroke</label>
             <select className="form-select w-full" id="stroke" name="stroke" value={formData.stroke} onChange={handleChange} required>
-              <option value="1">Yes</option>
-              <option value="0">No</option>
+              <option value="Yes">Yes</option>
+              <option value="No">No</option>
             </select> 
           </div>
           <div className="mb-4">

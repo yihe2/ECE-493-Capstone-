@@ -92,7 +92,7 @@ def JSON_inperpreter(data):
                         asset = float(data["financial_information"]["savings"])
                         income = float(data["financial_information"]["income"])
                         expense = float(data["financial_information"]["expense"])
-                        stock = float(data["financial_information"]["investments"][0]["value"])
+                        stock = float(data["financial_information"]["investments"])
                         debt = float(data["financial_information"]["debt"])
                         senddata["years"] = (health_info_values[9] - age) * 4
                         senddata["monthly_installment"] = calculate_monthly_contribution((health_info_values[9] - age) * 4, 100000, asset, income, expense, stock, debt)
