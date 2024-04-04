@@ -106,7 +106,7 @@ const Login = () => {
         </p>
         <p className="mt-4 text-gray-600 text-sm">
           View our Methodology{' '}
-          <Link to="/information" className="text-blue-500">
+          <Link to="/information" className="text-blue-500" target="_blank">
             Here
           </Link>
         </p>
