@@ -52,7 +52,7 @@ def JSON_health_encoder(json_data):
             else:
                 encoded_array.append(mappings[key].get(value, 'Unknown'))
         else:
-            encoded_array.append(int(value))
+            encoded_array.append(float(value))
     
     return encoded_array
 
