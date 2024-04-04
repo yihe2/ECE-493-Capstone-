@@ -5,6 +5,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext'
 import axios from 'axios';
 
+
 const CreateAccount = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -12,6 +13,8 @@ const CreateAccount = () => {
   const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
   const { dispatch } = useAuthContext();
+
+
 
   const handleCreateAccount = async () => {
   
