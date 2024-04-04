@@ -1,5 +1,10 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
+const Recipient = require("mailersend").Recipient;
+const EmailParams = require("mailersend").EmailParams;
+const Sender = require("mailersend").Sender;
+const MailerSend = require("mailersend");
+
 
 const maxAge = 3*24*60*60; // 3 days
 
@@ -50,7 +55,26 @@ module.exports.register = async (req, res, next) => {
       // })
       
       // res.status(201).json({ user: user._id, created: true });
-      res.status(200).json({email ,token})
+
+      const mailerSend = new MailerSend.MailerSend({
+        apiKey: process.env.API_KEY
+      });
+
+      const sentFrom = new Sender(process.env.EMAIL, "HealthWealth Team");
+      const recipients = [new Recipient(email, "HealthWealth User")];
+
+      const emailParams = new EmailParams()
+      emailParams.setFrom(sentFrom).setTo(recipients).setReplyTo(sentFrom).setSubject("Sign up").setHtml("Thanks for signing up for healthwealth").setText("Thanks for signing up for healthwealth");
+
+      await mailerSend.email.send(emailParams).then((result) => {
+        console.log(result);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+
+
+      res.status(200).json({email ,token});
     } catch (err) {
       console.log(err);
       const errors = handleErrors(err);
