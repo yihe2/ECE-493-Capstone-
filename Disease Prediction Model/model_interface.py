@@ -54,19 +54,19 @@ risk_level_mapping = {
         "cost_bounds": (0, 500),
         "suggested_actions": "Focus on lifestyle modifications and regular monitoring.",
     },
-    (21, 40): {
+    (20, 40): {
         "cost_bounds": (500, 2000),
         "suggested_actions": "Initiate or adjust medications, with continued lifestyle modifications and monitoring.",
     },
-    (41, 60): {
+    (40, 60): {
         "cost_bounds": (2000, 5000),
         "suggested_actions": "Consider referral to a specialist, more intensive medication regimen, and possible non-invasive tests.",
     },
-    (61, 80): {
+    (60, 80): {
         "cost_bounds": (5000, 20000),
         "suggested_actions": "Frequent follow-ups, advanced diagnostic assessments, and potentially non-invasive procedures.",
     },
-    (81, 100): {
+    (80, 100): {
         "cost_bounds": (20000, 100000),
         "suggested_actions": "Possible invasive procedures such as angioplasty or bypass surgery, along with comprehensive rehabilitation.",
     },
