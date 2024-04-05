@@ -39,7 +39,7 @@ const CreateAccount = () => {
         withCredentials: true,
       });
       console.log(data)
-      if (data.status === 200) {
+      if (data.data.email) {
         console.log('Create Account Successful!');
         sessionStorage.setItem('user', data.data.email)
         dispatch({type: 'LOGIN', payload: data.data.email})
@@ -69,7 +69,7 @@ const CreateAccount = () => {
         )}
         <div className="mb-4">
           <label htmlFor="username" className="text-sm font-semibold text-gray-600 block">
-            Username
+            Email
           </label>
           <input
             type="email"
