@@ -13,20 +13,7 @@ const client = new MongoClient(uri, {
   },
 });
 
-async function run() {
-  try {
-    // Connect the client to the server	(optional starting in v4.7)
-    await client.connect();
-    // Send a ping to confirm a successful connection
-    await client.db("admin").command({ ping: 1 });
-    console.log(
-      "Pinged your deployment. You successfully connected to MongoDB!"
-    );
-  } finally {
-    // Ensures that the client will close when you finish/error
-    await client.close();
-  }
-}
+
 
 
 // Function for inserting Health Information
@@ -48,15 +35,16 @@ async function insertHealthInformation(
   BMI,
   PhysicalHealth,
   MentalHealth,
-  SleepTime
+  SleepTime,
+  client
 ) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
 
@@ -84,7 +72,7 @@ async function insertHealthInformation(
     const result = await collection.insertOne(healthInfoDocument);
     console.log(`Health information inserted with ID: ${result.insertedId}`);
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
@@ -95,15 +83,16 @@ async function insertFinancialInformation(
   expense,
   savings,
   investments,
-  debt
+  debt,
+  client
 ) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
@@ -119,21 +108,21 @@ async function insertFinancialInformation(
     const result = await collection.insertOne(financialInfoDocument);
     console.log(`Financial information inserted with ID: ${result.insertedId}`);
   } finally {
-    await client.close();
+    // await client.close();
   }
   // TODO: call send user indep. -> rename sthe function
   // sendNewUser(email, 1);
 }
 
 // Send to backend using this
-async function sendNewUser(email, riskLevel, mode) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function sendNewUser(email, riskLevel, mode, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const healthCollection = database.collection("HealthInformation");
     const financialCollection = database.collection("FinancialInformation");
@@ -190,21 +179,23 @@ async function sendNewUser(email, riskLevel, mode) {
       console.error(error);
     }
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 // Updating Functions
-async function updateHealthInformation(email, updates) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function updateHealthInformation(email, updates, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
 
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
+    console.log("From updates:")
+    console.log(updates)
     const collection = database.collection("HealthInformation");
 
     // remove ID from update
@@ -229,18 +220,18 @@ async function updateHealthInformation(email, updates) {
   } catch (e) {
     console.log(e)
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function getHealthInformation(email) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function getHealthInformation(email, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
     console.log(email)
@@ -259,18 +250,18 @@ async function getHealthInformation(email) {
     console.error("An error occurred while fetching health information:", error);
     throw error; 
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function getFinancialInformation(email) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function getFinancialInformation(email, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
     console.log(email)
@@ -289,18 +280,18 @@ async function getFinancialInformation(email) {
     console.error("An error occurred while fetching health information:", error);
     throw error; 
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function updateFinancialInformation(email, updates) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function updateFinancialInformation(email, updates, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
@@ -323,18 +314,18 @@ async function updateFinancialInformation(email, updates) {
       );
     }
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function updateUserInformation(email, updates) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
+async function updateUserInformation(email, updates, client) {
+  // const client = new MongoClient(uri, {
+  //   useNewUrlParser: true,
+  //   useUnifiedTopology: true,
+  // });
 
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test2");
     const collection = database.collection("users");
 
@@ -354,14 +345,14 @@ async function updateUserInformation(email, updates) {
       );
     }
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
 // Code for deletinng collections
-async function deleteUser(email) {
+async function deleteUser(email, client) {
   try {
-    await client.connect();
+    // await client.connect();
 
     const database = client.db("test");
     const collection = database.collection("users");
@@ -379,18 +370,13 @@ async function deleteUser(email) {
     console.error(e)
     throw e;
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function deleteHealthInformation(email) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+async function deleteHealthInformation(email, client) {
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
 
@@ -404,18 +390,13 @@ async function deleteHealthInformation(email) {
       console.log("No health information found with that ID.");
     }
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function deleteFinancialInformation(email) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+async function deleteFinancialInformation(email, client) {
   try {
-    await client.connect();
+    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
@@ -429,18 +410,12 @@ async function deleteFinancialInformation(email) {
       console.log("No financial information found with that ID.");
     }
   } finally {
-    await client.close();
+    // await client.close();
   }
 }
 
-async function deleteAllInformation(email) {
-  const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
+async function deleteAllInformation(email, client) {
   try {
-    await client.connect();
     const database = client.db("test");
     const healthCollection = database.collection("HealthInformation");
     const financialCollection = database.collection("FinancialInformation");
@@ -480,14 +455,12 @@ async function deleteAllInformation(email) {
     console.error(e)
     throw e;
   } finally {
-    await client.close();
   }
 }
 
 
 
 module.exports = {
-  run,
   insertHealthInformation,
   insertFinancialInformation,
   sendNewUser,
