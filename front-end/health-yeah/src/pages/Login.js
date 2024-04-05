@@ -48,13 +48,14 @@ const Login = () => {
         setIsLoading(false)
         navigate("/")
       } else {
-        setError('Invalid username or password. Please try again.');
+        setError('Something went wrong, try again');
         // Clear password field on invalid entry
         setIsLoading(false)
         setPassword('');
       }
     } catch (err) {
       setIsLoading(false)
+      setError('Invalid username or password. Please try again.');
       console.log(err);
     }
   };
@@ -68,7 +69,7 @@ const Login = () => {
         )}
         <div className="mb-4">
           <label htmlFor="username" className="text-sm font-semibold text-gray-600 block">
-            Username
+            Email
           </label>
           <input
             type="email"

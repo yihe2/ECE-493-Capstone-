@@ -43,6 +43,8 @@ module.exports.register = async (req, res, next) => {
     try {
       const { email, password } = req.body;
       const user = await User.create({ email, password });
+      console.log("USER")
+      console.log(user)
       const token = createToken(user._id);
   
       // res.cookie("jwt", token, {

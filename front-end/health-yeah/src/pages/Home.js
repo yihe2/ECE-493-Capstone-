@@ -12,6 +12,7 @@ const Home = () => {
   const [prediction, setPrediction] = useState('');
   const [finPlan, setFinPlan] = useState('');
   const [targetRisk, setTargetRisk] = useState('0.3');
+  const [error, setError] = useState('');
 
 
   const handleChange = (event) => {
@@ -129,9 +130,10 @@ const Home = () => {
 
       }
       else {
-        // SOME ERROR DISPLAY
+        setError('Please Save Health and Financial Info before predicting!')
       }
     } catch (e) {
+      setError('Something is wrong, try again')
       console.error(e);
     }
 
@@ -147,6 +149,9 @@ const Home = () => {
             <p className="text-gray-700 mb-4">
               Click the button below to calculate your cardiovascular risk level!
             </p>
+            {error && (
+              <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
+            )}
             {showScore ? (
               <>
               <p>Based on your health factors, our model has determined your risk level to be: </p>

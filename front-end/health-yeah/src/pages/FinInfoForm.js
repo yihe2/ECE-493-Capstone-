@@ -148,7 +148,7 @@ const FinInfoForm = () => {
             <input type="number" className="form-input w-full" id="debt" name="debt" min="0" value={formData.debt} onChange={handleChange} />  
           </div>
           <div className="mt-6">
-            <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
+            <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Save</button>
           </div>
         </form>
       </div>

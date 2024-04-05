@@ -26,14 +26,6 @@ async function run() {
     }
 }
 
-  
-
-  // METHODS NEEDED:
-  // --------------
-  // - check if account exists
-  // - create account
-  // - delete account
-  // - login -> how tf does that work innit???
 
   async function checkUser(email, password) {
     try {

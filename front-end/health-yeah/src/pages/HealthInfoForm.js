@@ -256,7 +256,7 @@ const HealthInfoForm = () => {
             <input type="number" className="form-input w-full" id="sleepTime" name="sleepTime" min="0" max="24" value={formData.sleepTime} onChange={handleChange}/>
           </div>
           <div className="mt-6">
-            <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Submit</button>
+            <button type="submit" className="bg-blue-500 text-white font-semibold py-2 px-4 rounded hover:bg-blue-600 transition duration-200">Save</button>
           </div>
         </form>
       </div>
