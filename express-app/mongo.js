@@ -179,7 +179,6 @@ async function sendNewUser(email, riskLevel, mode, client) {
       console.error(error);
     }
   } finally {
-    // await client.close();
   }
 }
 // Updating Functions
@@ -220,7 +219,6 @@ async function updateHealthInformation(email, updates, client) {
   } catch (e) {
     console.log(e)
   } finally {
-    // await client.close();
   }
 }
 
@@ -250,7 +248,6 @@ async function getHealthInformation(email, client) {
     console.error("An error occurred while fetching health information:", error);
     throw error; 
   } finally {
-    // await client.close();
   }
 }
 
@@ -280,7 +277,6 @@ async function getFinancialInformation(email, client) {
     console.error("An error occurred while fetching health information:", error);
     throw error; 
   } finally {
-    // await client.close();
   }
 }
 
@@ -314,7 +310,6 @@ async function updateFinancialInformation(email, updates, client) {
       );
     }
   } finally {
-    // await client.close();
   }
 }
 
@@ -345,7 +340,6 @@ async function updateUserInformation(email, updates, client) {
       );
     }
   } finally {
-    // await client.close();
   }
 }
 
@@ -370,7 +364,6 @@ async function deleteUser(email, client) {
     console.error(e)
     throw e;
   } finally {
-    // await client.close();
   }
 }
 

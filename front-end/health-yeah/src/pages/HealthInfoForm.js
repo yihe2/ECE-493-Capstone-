@@ -103,8 +103,13 @@ const HealthInfoForm = () => {
       {
         withCredentials: true,
       });
+      console.log("from health info form")
+      console.log(get_response)
+      console.log("before status ;pgged")
+      console.log(get_response.status)
       if (get_response.status === 200) {
         // update
+        console.log(formData)
         const response = await axios.put("http://127.0.0.1:3001/update-health-info", formData, {
           withCredentials: true,
         });

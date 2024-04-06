@@ -153,10 +153,13 @@ def JSON_inperpreter(data):
                         upper_monthly_installment = calculate_monthly_contribution(
                             years, upper_bound, asset, income, expense, stock, debt
                         )
-
-                        senddata["monthly_installment"] = (
-                            f"{lower_monthly_installment}-{upper_monthly_installment}"
-                        )
+                        
+                        if upper_monthly_installment == -2 or lower_monthly_installment == -2:
+                            senddata["monthly_installment"] = -2 
+                        else:
+                            senddata["monthly_installment"] = (
+                                f"{lower_monthly_installment}-{upper_monthly_installment}"
+                            )
                         senddata["suggested_actions"] = suggested_actions
                         # senddata["monthly_installment"] = (
                         #     calculate_monthly_contribution(
