@@ -1,11 +1,9 @@
 from joblib import load
 import pandas as pd
-import json
-import requests
 
 
 url = "http://127.0.0.1:3001/user/info"
-# Provided mappings
+
 mappings = {
     "Smoking": {"No": 0, "Yes": 1},
     "AlcoholDrinking": {"No": 0, "Yes": 1},
@@ -81,13 +79,12 @@ def JSON_health_encoder(json_data):
     for key, value in health_info.items():
         if key in mappings:
             if key == "AgeCategory":  # Special handling for AgeCategory
-                # Assuming AgeCategory comes as an integer in JSON data
+
                 # Convert age into corresponding category code
-                for range_key, code in mappings[key].items():
-                    if range_key == "80 or older":
-                        if int(value) >= 80:
-                            encoded_array.append(code)
-                            break
+                for range_key, code in mappings[key].items():  # pragma: no branch
+                    if range_key == "80 or older" and int(value) >= 80:
+                        encoded_array.append(code)
+                        break
                     else:
                         age_range = range_key.split("-")
                         if int(age_range[0]) <= int(value) <= int(age_range[1]):
@@ -102,15 +99,10 @@ def JSON_health_encoder(json_data):
 
 
 def JSON_inperpreter(data):
-    # file_path = 'saved_data.json'
-    # with open(file_path, 'w') as file:
-    #     json.dump(data, file)
-    # Extracting mode
     mode = int(data["mode"])
     email = data["email"]
 
     health_info_values = JSON_health_encoder(data)
-    print(health_info_values)
     score = risk_score_prediction(health_info_values)
 
     senddata = {"email": email}
@@ -126,14 +118,15 @@ def JSON_inperpreter(data):
                 senddata["monthly_installment"] = -3
             else:
                 senddata["monthly_installment"] = -1
-                while health_info_values[9] <= 12:
+                while health_info_values[9] <= 12:  # pragma no branch
                     health_info_values[9] += 1
                     score = risk_score_prediction(health_info_values)
                     if score >= new_risk_level:
-                        print(score)
-                        print(health_info_values[9])
 
-                        for bounds, info in risk_level_mapping.items():
+                        for (  # pragma: no branch
+                            bounds,
+                            info,
+                        ) in risk_level_mapping.items():
                             if bounds[0] <= score * 100 <= bounds[1]:
                                 lower_bound, upper_bound = info["cost_bounds"]
                                 suggested_actions = info["suggested_actions"]
@@ -153,28 +146,19 @@ def JSON_inperpreter(data):
                         upper_monthly_installment = calculate_monthly_contribution(
                             years, upper_bound, asset, income, expense, stock, debt
                         )
-                        
-                        if upper_monthly_installment == -2 or lower_monthly_installment == -2:
-                            senddata["monthly_installment"] = -2 
+
+                        if (
+                            upper_monthly_installment == -2
+                            or lower_monthly_installment == -2
+                        ):
+                            senddata["monthly_installment"] = -2
                         else:
                             senddata["monthly_installment"] = (
                                 f"{lower_monthly_installment}-{upper_monthly_installment}"
                             )
                         senddata["suggested_actions"] = suggested_actions
-                        # senddata["monthly_installment"] = (
-                        #     calculate_monthly_contribution(
-                        #         (health_info_values[9] - age) * 4,
-                        #         100000,
-                        #         asset,
-                        #         income,
-                        #         expense,
-                        #         stock,
-                        #         debt,
-                        #     )
-                        # )
                         break
     return senddata
-    # response = requests.post(url, json=senddata)
 
 
 def risk_score_prediction(user_input):
@@ -200,13 +184,6 @@ def risk_score_prediction(user_input):
         "KidneyDisease_encoded",
         "SkinCancer_encoded",
     ]
-
-    # user_input = [BMI, PhysicalHealth, MentalHealth, SleepTime,
-    #                        Smoking_encoded, AlcoholDrinking_encoded, Stroke_encoded,
-    #                        DiffWalking_encoded, Sex_encoded, AgeCategory_encoded,
-    #                        Race_encoded, Diabetic_encoded, PhysicalActivity_encoded,
-    #                        GenHealth_encoded, Asthma_encoded, KidneyDisease_encoded,
-    #                        SkinCancer_encoded]
     user_input_df = pd.DataFrame([user_input], columns=feature_names)
 
     probability = rf_classifier_loaded.predict_proba(user_input_df)
@@ -271,4 +248,4 @@ def calculate_monthly_contribution(
         else:
             monthly_contribution = deficit / months
 
-        return monthly_contribution
+        return round(monthly_contribution, 2)

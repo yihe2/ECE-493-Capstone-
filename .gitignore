@@ -27,3 +27,5 @@ npm-debug.log*
 # Ignore dependencies installed via npm
 **/package-lock.json
 yarn.lock
+
+__pycache__
