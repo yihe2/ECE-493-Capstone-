@@ -71,17 +71,28 @@ risk_level_mapping = {
 }
 
 
-# Function to encode the health information from a JSON
+"""
+This function encodes health information from a given JSON structure into a numerical array 
+suitable for further processing or machine learning predictions.
+
+Input: json_data (dictionary) - A JSON-like dictionary that contains health information 
+       under the key "health_information".
+Output: encoded_array (list) - A list of encoded health information values, ready for processing. 
+        This list includes encoded categorical variables and directly uses numerical values.
+"""
+
+
 def JSON_health_encoder(json_data):
     health_info = json_data["health_information"]
     encoded_array = []
 
     for key, value in health_info.items():
+        # Check if the key exists in the predefined mappings for encoding
         if key in mappings:
-            if key == "AgeCategory":  # Special handling for AgeCategory
-
-                # Convert age into corresponding category code
-                for range_key, code in mappings[key].items():  # pragma: no branch
+            # Special case for encoding age categories
+            if key == "AgeCategory":
+                # Iterating through age categories to find the correct encoding
+                for range_key, code in mappings[key].items():
                     if range_key == "80 or older" and int(value) >= 80:
                         encoded_array.append(code)
                         break
@@ -91,11 +102,25 @@ def JSON_health_encoder(json_data):
                             encoded_array.append(code)
                             break
             else:
+                # General case for encoding based on predefined mappings
                 encoded_array.append(mappings[key].get(value, "Unknown"))
         else:
+            # Directly use numerical values for non-categorical data
             encoded_array.append(float(value))
 
     return encoded_array
+
+
+"""
+This function interprets the encoded health information to determine 
+risk scores or monthly installments based on the mode specified in the 
+input data.
+
+Input: data (dictionary) - A JSON-like dictionary that includes mode selection, 
+       email, health information, and financial information (for mode 1).
+Output: senddata (dictionary) - A dictionary containing the email and either a 
+        risk score or monthly installment information based on the input mode.
+"""
 
 
 def JSON_inperpreter(data):
@@ -106,37 +131,44 @@ def JSON_inperpreter(data):
     score = risk_score_prediction(health_info_values)
 
     senddata = {"email": email}
+    # Mode 0: Calculate and return risk score only
     if mode == 0:
         senddata["score"] = score
+    # Mode 1: Calculate monthly installments based on future risk level
     elif mode == 1:
         age = health_info_values[9]
+        # Check if age is above a threshold
         if age >= 12:
             senddata["monthly_installment"] = -1
         else:
             new_risk_level = data["future_risk_level"]
+            # Compare new risk level with current score
             if new_risk_level <= score:
                 senddata["monthly_installment"] = -3
             else:
-                senddata["monthly_installment"] = -1
-                while health_info_values[9] <= 12:  # pragma no branch
+                # Incrementally simulate aging and recalculate risk
+                while health_info_values[9] <= 12:
                     health_info_values[9] += 1
                     score = risk_score_prediction(health_info_values)
                     if score >= new_risk_level:
-
-                        for (  # pragma: no branch
-                            bounds,
-                            info,
-                        ) in risk_level_mapping.items():
+                        # Find the appropriate risk level mapping
+                        for bounds, info in risk_level_mapping.items():
                             if bounds[0] <= score * 100 <= bounds[1]:
                                 lower_bound, upper_bound = info["cost_bounds"]
                                 suggested_actions = info["suggested_actions"]
                                 break
 
-                        asset = float(data["financial_information"]["savings"])
-                        income = float(data["financial_information"]["income"])
-                        expense = float(data["financial_information"]["expense"])
-                        stock = float(data["financial_information"]["investments"])
-                        debt = float(data["financial_information"]["debt"])
+                        # Calculate the monthly installment based on financial information
+                        asset, income, expense, stock, debt = (
+                            float(data["financial_information"][key])
+                            for key in [
+                                "savings",
+                                "income",
+                                "expense",
+                                "investments",
+                                "debt",
+                            ]
+                        )
 
                         years = (health_info_values[9] - age) * 4
                         senddata["years"] = years
@@ -161,10 +193,21 @@ def JSON_inperpreter(data):
     return senddata
 
 
-def risk_score_prediction(user_input):
+"""
+This function predicts the risk score based on the user input 
+using a pre-trained random forest classifier.
 
+Input: user_input (list) - A list of encoded health information values.
+Output: A float value representing the probability of the risk score.
+
+"""
+
+
+def risk_score_prediction(user_input):
+    # Load the pre-trained classifier
     rf_classifier_loaded = load("rf_classifier.joblib")
 
+    # Define feature names for the input dataframe
     feature_names = [
         "BMI",
         "PhysicalHealth",
@@ -184,10 +227,26 @@ def risk_score_prediction(user_input):
         "KidneyDisease_encoded",
         "SkinCancer_encoded",
     ]
+
+    # Create a dataframe from the user input
     user_input_df = pd.DataFrame([user_input], columns=feature_names)
 
+    # Predict the probability of risk
     probability = rf_classifier_loaded.predict_proba(user_input_df)
     return probability[0][1]
+
+
+"""
+Calculates the monthly financial contribution needed to reach
+ a saving goal considering various financial factors.
+
+Inputs: Multiple financial parameters including years until the
+        goal, saving goal amount, total assets, annual income and 
+        expenses, stock value, and current debt. Optional parameters 
+        include inflation and interest rates.
+Output: The calculated monthly contribution amount as a float. 
+        A return value of -2 indicates the saving goal is already met.
+"""
 
 
 def calculate_monthly_contribution(

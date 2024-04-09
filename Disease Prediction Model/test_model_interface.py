@@ -364,6 +364,14 @@ class Model_Testing(unittest.TestCase):
             [20.0, 15.0, 10.0, 8.0, 1, 0, 1, 1, 1, 12, 1, 2, 1, 3, 1, 1, 0],
         )
 
+    def test_score_calculation(self):
+        score = model_interface.risk_score_prediction(
+            [20.0, 15.0, 10.0, 8.0, 1, 0, 1, 1, 1, 12, 1, 2, 1, 3, 1, 1, 0]
+        )
+
+        self.assertGreaterEqual(score, 0, "Score should be at least 0")
+        self.assertLessEqual(score, 1, "Score should be at most 1")
+
     def test_financial_plan_too_much_money(self):
         self.assertEqual(
             model_interface.calculate_monthly_contribution(
@@ -387,10 +395,3 @@ class Model_Testing(unittest.TestCase):
             ),
             503.78,
         )
-
-    def test_score_calculation(self):
-        score = model_interface.risk_score_prediction(
-            [20.0, 15.0, 10.0, 8.0, 1, 0, 1, 1, 1, 12, 1, 2, 1, 3, 1, 1, 0]
-        )
-        self.assertGreaterEqual(score, 0, "Score should be at least 0")
-        self.assertLessEqual(score, 1, "Score should be at most 1")
