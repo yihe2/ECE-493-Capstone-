@@ -34,8 +34,6 @@ const ChangePassword = () => {
     verifyUser();
   }, [])
 
-  
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'currentPassword') {
@@ -85,11 +83,51 @@ const ChangePassword = () => {
     setErrorMessage('');
   };
 
+  // TODO: does not work aka incomplete
+  const handleUsernameSubmit = async (e) => {
+    e.preventDefault();
+
+    const password_data = {
+      email: sessionStorage.getItem("user"),
+      password: currentPassword,
+      newPassword: newPassword
+    }
+    // Perform validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      setErrorMessage('Please fill in all fields');
+      return;
+    }
+    if (newPassword !== confirmPassword) {
+      setErrorMessage('Passwords do not match');
+      return;
+    }
+    // Implement password change logic here
+    console.log('Password change submitted');
+    // Reset form fields
+
+    
+    try {
+      const data = await axios.put("http://localhost:3001/change-password", {password_data},
+        {
+          withCredentials: true,
+        });
+    } catch (e){
+      console.log(e)
+    }
+
+
+    setCurrentPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setErrorMessage('');
+  };
+
+
   return (
     <>
       <Navbar />
-      <div className="min-h-screen flex items-center justify-center bg-gray-100">
-        <div className="bg-white p-8 rounded shadow-md w-96">
+      <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
+        <div className="bg-white p-8 rounded shadow-md w-96 mb-4">
           <h2 className="text-2xl font-bold mb-6">Change Password</h2>
           {errorMessage && (
             <div className="mb-4 text-red-500 text-sm font-semibold">{errorMessage}</div>
@@ -141,12 +179,59 @@ const ChangePassword = () => {
               Change Password
             </button>
           </form>
-          {/* <p className="mt-4 text-gray-600 text-sm">
-            Remember your password?{' '}
-            <Link to="/login" className="text-blue-500">
-              Log in here.
-            </Link>
-          </p> */}
+        </div>
+        <div className="bg-white p-8 rounded shadow-md w-96 mt-4">
+          <h2 className="text-2xl font-bold mb-6">Change Password</h2>
+          {errorMessage && (
+            <div className="mb-4 text-red-500 text-sm font-semibold">{errorMessage}</div>
+          )}
+          <form onSubmit={handleSubmit}>
+            <div className="mb-4">
+              <label htmlFor="currentPassword" className="text-sm font-semibold text-gray-600 block">
+                Current Password
+              </label>
+              <input
+                type="password"
+                id="currentPassword"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter your current password"
+                value={currentPassword}
+                onChange={handleChange}
+                name="currentPassword"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="newPassword" className="text-sm font-semibold text-gray-600 block">
+                New Password
+              </label>
+              <input
+                type="password"
+                id="newPassword"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Enter your new password"
+                value={newPassword}
+                onChange={handleChange}
+                name="newPassword"
+              />
+            </div>
+            <div className="mb-4">
+              <label htmlFor="confirmPassword" className="text-sm font-semibold text-gray-600 block">
+                Confirm New Password
+              </label>
+              <input
+                type="password"
+                id="confirmPassword"
+                className="w-full p-2 border border-gray-300 rounded"
+                placeholder="Confirm your new password"
+                value={confirmPassword}
+                onChange={handleChange}
+                name="confirmPassword"
+              />
+            </div>
+            <button className="bg-blue-500 text-white p-2 rounded w-full" type="submit">
+              Change Password
+            </button>
+          </form>
         </div>
       </div>
     </>
