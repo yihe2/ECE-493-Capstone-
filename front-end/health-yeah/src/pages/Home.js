@@ -84,11 +84,12 @@ const Home = () => {
         else {
           setFinPlan(true)
           setShowFinPlan("Something Went Wrong")
+          setFinError("Something wrong")
         }
 
       }
       else {
-        setFinError("Somethign wrong")
+        setFinError("Something wrong")
       }
     } catch (e) {
       console.error(e);
@@ -179,7 +180,7 @@ const Home = () => {
               Click the button below to calculate your cardiovascular risk level!
             </p>
             {error && (
-              <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
+              <div className="mb-4 text-red-500 text-sm font-semibold">{finError }</div>
             )}
             {showScore ? (
               <>
@@ -198,6 +199,9 @@ const Home = () => {
             <p className="text-gray-700 mb-4">
               Click the button below to calculate your Future Risks!
             </p>
+            {finError && (
+              <div className="mb-4 text-red-500 text-sm font-semibold">{finError }</div>
+            )}
             {showFinPlan ? (
               <>
                 <p>Based on your Finances, Health Score, and target risk: </p>
