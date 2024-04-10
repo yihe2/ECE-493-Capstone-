@@ -6,7 +6,6 @@ import axios from 'axios';
 
 const SecretTest = () => {
   const navigate = useNavigate();
-  // Issue with logout
 
 
   // login effect

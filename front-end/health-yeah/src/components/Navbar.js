@@ -22,7 +22,7 @@ const Navbar = () => {
         <div className="flex items-center justify-between h-16">
           <div className="flex">
             <div className="flex-shrink-0 flex items-center">
-              <span className="text-white text-lg font-bold">Logo</span>
+              <span className="text-white text-lg font-bold">Health Wealth</span>
             </div>
             <div className="hidden sm:block sm:ml-6">
               <div className="flex space-x-4">

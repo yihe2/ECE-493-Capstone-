@@ -72,10 +72,13 @@ const Home = () => {
                 break;
             }
           }
-          else {
+          else if (data.data.years) {
             setFinPlan(`We predict you will reach the target risk level in ${data.data.years} years.\n\n
-            Based on this we recommend you save an extra ${data.data.monthly_installment} per month.\n\n
+            Based on this we recommend you save an extra ($) ${data.data.monthly_installment} per month.\n\n
             Our advice: ${data.data.suggested_actions}`)
+          }
+          else {
+            setFinPlan(`Congratulations! You won't reach that risk level until at least age 80!`)
           }
         }
         else {
@@ -85,7 +88,7 @@ const Home = () => {
 
       }
       else {
-        // SOME ERROR DISPLAY
+        setFinError("Somethign wrong")
       }
     } catch (e) {
       console.error(e);
@@ -197,9 +200,8 @@ const Home = () => {
             </p>
             {showFinPlan ? (
               <>
-                <p>Based on your Finances, Health Score, and target risk our model has determined your risk level to be: </p>
+                <p>Based on your Finances, Health Score, and target risk: </p>
                 <p className='text-gray-700 mb-4'>{finPlan}</p>
-                {/* TODO: More intense case handling for negative codes */}
               </>
             ) : (
               <></>
