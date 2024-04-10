@@ -125,26 +125,27 @@ const FinInfoForm = () => {
       <Navbar />
       <div className="max-w-md mx-auto mt-8">
         <h1 className="text-2xl font-semibold mb-4">Financial Info Form</h1>
+        <p>For the purposes of the prototype, an inflation rate of 3% is applied as well as an interest rate of 2% and a investment increase of 5% per annum.<br/></p>
         <form onSubmit={handleSubmit}>
         <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="income">Income ($)</label>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="income">Annual Income ($)</label>
             <input type="number" className="form-input w-full" id="income" name="income" min="0" value={formData.income} onChange={handleChange} />  
         </div>
         <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="expense">Expenses ($)</label>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="expense">Annual Expenses ($)</label>
             <input type="number" className="form-input w-full" id="expense" name="expense" min="0" value={formData.expense} onChange={handleChange} />  
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Savings ($)</label>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="savings">Total Savings ($)</label>
             <input type="number" className="form-input w-full" id="savings" name="savings" min="0" value={formData.savings} onChange={handleChange} />  
           </div>
           <div className="mb-4">          
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="investments">Value of Investments ($)</label>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="investments">Value of All Investments ($)</label>
             <input type="number" className="form-input w-full" id="investments" name="investments" min="0" value={formData.investments} onChange={handleChange} />
               {/* <input type="text" className="form-input w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} /> */}
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700 font-semibold mb-2" htmlFor="debt">Outstanding Debts ($)</label>
+            <label className="block text-gray-700 font-semibold mb-2" htmlFor="debt">Total Outstanding Debts ($)</label>
             <input type="number" className="form-input w-full" id="debt" name="debt" min="0" value={formData.debt} onChange={handleChange} />  
           </div>
           <div className="mt-6">

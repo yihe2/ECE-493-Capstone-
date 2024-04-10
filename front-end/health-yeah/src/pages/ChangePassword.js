@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import {useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Navbar from '../components/Navbar';
 
@@ -93,7 +93,6 @@ const ChangePassword = () => {
     setErrorMessage('');
   };
 
-  // TODO: does not work aka incomplete
   const handleUsernameSubmit = async (e) => {
     e.preventDefault();
 
@@ -113,7 +112,6 @@ const ChangePassword = () => {
     }
     // Implement password change logic here
     console.log('change username  submitted');
-    // Reset form fields
 
     
     try {
