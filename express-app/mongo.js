@@ -38,10 +38,6 @@ async function insertHealthInformation(
   SleepTime,
   client
 ) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
     // await client.connect();
@@ -86,10 +82,6 @@ async function insertFinancialInformation(
   debt,
   client
 ) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
     // await client.connect();
@@ -110,16 +102,10 @@ async function insertFinancialInformation(
   } finally {
     // await client.close();
   }
-  // TODO: call send user indep. -> rename sthe function
-  // sendNewUser(email, 1);
 }
 
 // Send to backend using this
 async function sendNewUser(email, riskLevel, mode, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
     // await client.connect();
@@ -162,7 +148,6 @@ async function sendNewUser(email, riskLevel, mode, client) {
       },
       financial_information: financial,
       future_risk_level: parseFloat(riskLevel), 
-      // TODO: Change the risk level to allow info from function call
     };
 
     delete doc.financial_information._id;
@@ -183,13 +168,7 @@ async function sendNewUser(email, riskLevel, mode, client) {
 }
 // Updating Functions
 async function updateHealthInformation(email, updates, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
-
-
-
+  
   try {
     // await client.connect();
     const database = client.db("test");
@@ -223,13 +202,9 @@ async function updateHealthInformation(email, updates, client) {
 }
 
 async function getHealthInformation(email, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
+
 
   try {
-    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
     console.log(email)
@@ -252,13 +227,8 @@ async function getHealthInformation(email, client) {
 }
 
 async function getFinancialInformation(email, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
-    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
     console.log(email)
@@ -281,13 +251,8 @@ async function getFinancialInformation(email, client) {
 }
 
 async function updateFinancialInformation(email, updates, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
-    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
@@ -314,13 +279,8 @@ async function updateFinancialInformation(email, updates, client) {
 }
 
 async function updateUserInformation(email, updates, client) {
-  // const client = new MongoClient(uri, {
-  //   useNewUrlParser: true,
-  //   useUnifiedTopology: true,
-  // });
 
   try {
-    // await client.connect();
     const database = client.db("test2");
     const collection = database.collection("users");
 
@@ -346,7 +306,6 @@ async function updateUserInformation(email, updates, client) {
 // Code for deletinng collections
 async function deleteUser(email, client) {
   try {
-    // await client.connect();
 
     const database = client.db("test");
     const collection = database.collection("users");
@@ -389,7 +348,6 @@ async function deleteHealthInformation(email, client) {
 
 async function deleteFinancialInformation(email, client) {
   try {
-    // await client.connect();
     const database = client.db("test");
     const collection = database.collection("FinancialInformation");
 
