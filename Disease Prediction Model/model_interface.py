@@ -146,6 +146,8 @@ def JSON_inperpreter(data):
             if new_risk_level <= score:
                 senddata["monthly_installment"] = -3
             else:
+                senddata["monthly_installment"] = -1
+
                 # Incrementally simulate aging and recalculate risk
                 while health_info_values[9] <= 12:
                     health_info_values[9] += 1
