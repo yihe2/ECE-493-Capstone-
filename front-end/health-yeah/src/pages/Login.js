@@ -8,14 +8,15 @@ import axios from "axios";
 const Login = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [actualUserName, setactualUserName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(null)
-  const { dispatch } = useAuthContext()
+  const { dispatch } = useAuthContext();
   const navigate = useNavigate();
 
   const handleLogin = async () => {
 
-    if (!username || !password) {
+    if (!username || !password || !actualUserName) {
       setError('Please fill out both username and password fields.');
       return;
     }
@@ -26,6 +27,8 @@ const Login = () => {
     const loginData = {
       email: username,
       password: password,
+      username: actualUserName
+
     };
 
     try {
@@ -40,9 +43,10 @@ const Login = () => {
         // Add redirection logic or any other actions after successful login
         
         sessionStorage.setItem('user', response.data.email)
+        sessionStorage.setItem('usename', response.data.username)
 
         // update the auth context
-        dispatch({type: 'LOGIN', payload: response.data.email})
+        dispatch({type: 'LOGIN', payload: {user: response.data.email, username: response.data.username}})
   
         // update loading state
         setIsLoading(false)
@@ -67,6 +71,19 @@ const Login = () => {
         {error && (
           <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
         )}
+        <div className="mb-4">
+          <label htmlFor="actualUsername" className="text-sm font-semibold text-gray-600 block">
+            Username
+          </label>
+          <input
+            type="text"
+            id="actualUsername"
+            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Enter your username (display name)"
+            value={actualUserName}
+            onChange={(e) => setactualUserName(e.target.value)}
+          />
+        </div>
         <div className="mb-4">
           <label htmlFor="username" className="text-sm font-semibold text-gray-600 block">
             Email

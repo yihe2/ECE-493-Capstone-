@@ -9,6 +9,7 @@ import axios from 'axios';
 const CreateAccount = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [actualUserName, setactualUserName] = useState('');
   const [error, setError] = useState('');
   const [isLoading, setIsLoading] = useState(null);
   const navigate = useNavigate();
@@ -18,8 +19,8 @@ const CreateAccount = () => {
 
   const handleCreateAccount = async () => {
   
-    if (!username || !password) {
-      setError('Please fill out both username and password fields.');
+    if (!username || !password || !actualUserName) {
+      setError('Please fill out both username, email, and password fields.');
       return;
     }
 
@@ -29,6 +30,7 @@ const CreateAccount = () => {
     const createAccountData = {
       email: username,
       password: password,
+      username: actualUserName
     };
     console.log({...createAccountData})
     try {
@@ -42,7 +44,8 @@ const CreateAccount = () => {
       if (data.data.email) {
         console.log('Create Account Successful!');
         sessionStorage.setItem('user', data.data.email)
-        dispatch({type: 'LOGIN', payload: data.data.email})
+        sessionStorage.setItem('username', data.data.username)
+        dispatch({type: 'LOGIN', payload: {user: data.data.email, username: data.data.username}})
         setIsLoading(false)
         navigate("/healthinfo")
         // Add redirection logic or any other actions after successful login
@@ -68,6 +71,19 @@ const CreateAccount = () => {
           <div className="mb-4 text-red-500 text-sm font-semibold">{error}</div>
         )}
         <div className="mb-4">
+          <label htmlFor="actualUsername" className="text-sm font-semibold text-gray-600 block">
+            Username (display name)
+          </label>
+          <input
+            type="text"
+            id="actualUsername"
+            className="w-full p-2 border border-gray-300 rounded"
+            placeholder="Enter your username"
+            value={actualUserName}
+            onChange={(e) => setactualUserName(e.target.value)}
+          />
+        </div>
+        <div className="mb-4">
           <label htmlFor="username" className="text-sm font-semibold text-gray-600 block">
             Email
           </label>
@@ -75,7 +91,7 @@ const CreateAccount = () => {
             type="email"
             id="username"
             className="w-full p-2 border border-gray-300 rounded"
-            placeholder="Enter your username"
+            placeholder="Enter your email"
             value={username}
             onChange={(e) => setUsername(e.target.value)}
           />

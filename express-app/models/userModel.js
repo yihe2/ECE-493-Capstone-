@@ -7,6 +7,9 @@ const userSchema = new mongoose.Schema({
         required: [true, "email is required"],
         unique: true
     },
+    usernmae: {
+        type: String,
+    },
     password: {
         type: String,
         required: [true, "password is required"],
@@ -64,6 +67,7 @@ userSchema.statics.changePassword = async function(email, password, newPassword)
 
     return user;
 }
+
 
 
 
