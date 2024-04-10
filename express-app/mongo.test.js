@@ -1,4 +1,4 @@
-const {insertUser, insertHealthInformation, insertFinancialInformation, updateHealthInformation, deleteHealthInformation, getHealthInformation, deleteFinancialInformation, updateFinancialInformation} = require('./mongo.js');
+const {insertHealthInformation, insertFinancialInformation, updateHealthInformation, deleteHealthInformation, getHealthInformation, getFinancialInformation, deleteFinancialInformation, updateFinancialInformation} = require('./mongo.js');
 const {MongoClient} = require('mongodb');
 
 const uri = 'mongodb+srv://sahusnai:YzhMRa0cjsrJEVhd@cluster0.nrkocdu.mongodb.net/'
@@ -112,6 +112,13 @@ describe('Mongooperations', () => {
         expect(updatedFinancialInfo).toBeTruthy();
         expect(updatedFinancialInfo.savings).toBe(updates.savings);
     }, 10000);
+
+    // Get Financial Test
+    it('should fetch financial information for a user', async () => {
+      const finInfo = await getFinancialInformation('test2@example.com', connection);
+      expect(finInfo).toBeTruthy();
+      expect(finInfo.email).toBe('test2@example.com');
+  }, 10000);
 
     // Delete Health
     it('should delete health information from collection', async () => {
