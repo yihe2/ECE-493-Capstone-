@@ -1,3 +1,6 @@
+
+const https = require('https');
+const fs = require('fs');
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -7,6 +10,12 @@ const port = 3001;
 const authRoutes = require("./Routes/AuthRoutes.js");
 const cookieParser = require("cookie-parser")
 require('dotenv').config()
+
+const options = {
+  key: fs.readFileSync( process.env.SERVER_KEY),
+  cert: fs.readFileSync( process.env.SERVER_CERT)
+};
+
 
 app.use(express.json());
 
@@ -57,4 +66,6 @@ app.use(cors({
 app.use(cookieParser());
 app.use(express.json());
 app.use("/", authRoutes);
+
+https.createServer(options, app).listen(443);
 
