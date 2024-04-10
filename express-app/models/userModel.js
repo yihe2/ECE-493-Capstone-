@@ -65,6 +65,33 @@ userSchema.statics.changePassword = async function(email, password, newPassword)
     return user;
 }
 
+userSchema.statics.changeEmail = async function(email, newEmail, password) {
+    // Find the user by email
+    const user = await this.findOne({ email });
+
+    if (!user) {
+        throw new Error("User not found");
+    }
+
+    // Validate current password
+    const isPasswordValid = await bcrypt.compare(password, user.password);
+    if (!isPasswordValid) {
+        throw new Error("Incorrect current password");
+    }
+
+    // Hash the new password
+    // const salt = await bcrypt.genSalt();
+    // const newPasswordHash = await bcrypt.hash(newPassword, salt);
+
+    // Update the user's password
+    user.email = newEmail;
+
+    // Save the updated user
+    await user.save();
+
+    return user;
+}
+
 
 
 module.exports = mongoose.model("Users", userSchema);
