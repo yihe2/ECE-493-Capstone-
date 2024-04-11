@@ -6,7 +6,9 @@
 ## Deployment Instructions
 Deploying Health Wealth in requires 3 terminals to contain the model interface, express application, and react app.
 
-Below the steps to from clone to deploy are shown. 
+Below the steps to from clone to deploy are shown. Steps are done assuming that Python3.8 is installed as well as node 21.7.1.
+
+The following instructions assume the project is being deployed on a Linux/Mac OS system. 
 
 ### Environment Setup
 1. **Clone the Repository:** 
@@ -29,41 +31,67 @@ Add the following variables within the newly created .env file.
     SERVER_KEY=<ABSOLUTE_PATH_TO>/express-app/server.key
     ```
 
+### Disease Prediction Setup
+1. **Run the follwing commands from the project root to set up virtual environment in the correct Repo.**
+    ```bash
+    $ cd Disease\ Prediction\ Model/
+    $ Python3 -m venv venv
+    $ source venv/bin/activate
+    ```
 
-3. **Configure Environment Variables:** 
-   Copy the `.env.example` file to `.env` and fill in the necessary environment variables.
+2. **Install all pip packages with the following commands** 
+    ```bash
+    $ pip install -r requirements.txt
+    ```
 
-4. **Run the Application:** 
+3. **Run the Following command to begin the Flask service** 
+    Assuming the previous packages installed with no errors, run the following command to deploy the microservice. 
    ```bash
-   npm start
+   $ Python3 app.py
    ```
 
-5. **Access the Application:** 
-   Once the application is running, you can access it at `http://localhost:3000` (or any other specified port).
+### Express App Setup
+1. **Run the following commands from the root directoru to set install the node packages for the express application**
+    ```bash
+    $ cd express-app
+    $ npm i
+    ```
+
+2. **Run the Following command to deploy the Express Application** 
+    ```bash
+    $ node app.js
+    ```
+
+    Once the messages of `DB Connection Successful from authroutes` and `DB Connection Successful` appear in the terminal the backend has been deployed.
+### React App Setup
+1. **Run the follwing commands from the project root to install needed packages for the front end.**
+    ```bash
+    $ cd front-end/health-yeah/
+    $ npm i
+    ```
+2. **Run the following command to deploy the react applcation on 127.0.0.1/3000** 
+    ```bash
+    $ npm run start
+    ```
+
+At this point the application has been deployed and a login page should be available at http://localhost:3000/
 
 ## User Guide
-[Project Name] is straightforward to use. Here are the main functionalities:
+Health Wealth is straightforward to use once deployed. Connect to http://localhost:3000/. 
 
-- [Functionality 1]: [Description of how to use it]
-- [Functionality 2]: [Description of how to use it]
-- [Functionality 3]: [Description of how to use it]
+From here, user functionality described in the SRS is available. Our system is secure and information sent to mongoDB is encrypted. However, it is not advisable to input sensitive personal information into our application at the prototype phase. False information for purpose of inference will suffice. 
 
-Below are some usage examples:
-
-1. **Example 1:** [Describe the scenario and steps to perform]
-2. **Example 2:** [Describe the scenario and steps to perform]
-3. **Example 3:** [Describe the scenario and steps to perform]
 
 ## Known Issues
-- [Issue 1]: [Description of the issue]
-- [Issue 2]: [Description of the issue]
-- [Issue 3]: [Description of the issue]
 
-If you encounter any issues not listed here, please report them in the issue tracker.
+There are two know issues within our code that may impact a users ability to interact with the system to the fullest extent. 
+
+1. Email service: The email service of the application is working and has been tested. We have hit the unique domain limit for the number of email addresses we can send to on a free tier account. An error should appear in the express terminal upon new account creation outlining this exception. Our team can provide a paper trail of signup with a known email or provide a live demonstration of this feature if needed. 
+- Refresh required after prediction: After a prediction is generated a user may be unable to save their information to the database. This is a frontend issue but we are unsure on the solution. A workaround is to refresh the application and input the updated financial/health information.
+
+If you encounter any issues not listed here, please report them to our team for future fixes. 
 
 ## Contributors
-- [Contributor 1](https://github.com/contributor1)
-- [Contributor 2](https://github.com/contributor2)
-
-## License
-This project is licensed under the [License Name]. See the [LICENSE](LICENSE) file for details.
+- [Yihe Wang](https://github.com/yihe2)
+- [Arjun Mehta](https://github.com/ArjunMehta01)
+- [Saif Husnain](https://github.com/2Bronze)
