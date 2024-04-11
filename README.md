@@ -1,7 +1,7 @@
 # Health Wealth
 
 ## Description
-[Project Name] is a [brief description of the project]. It is designed to [explain its purpose and functionality]. This project [aims to solve/addresses] [specific problem or need].
+Health Wealth is a medical and financial technology project that aims to give users accurate predictons on cardiovascular risk and budget requirements. It is designed for ECE493, the Computer Engineering Software Capstone Course at the Univerity of Alberta.
 
 ## Deployment Instructions
 Deploying Health Wealth in requires 3 terminals to contain the model interface, express application, and react app.
@@ -81,6 +81,27 @@ Health Wealth is straightforward to use once deployed. Connect to http://localho
 
 From here, user functionality described in the SRS is available. Our system is secure and information sent to mongoDB is encrypted. However, it is not advisable to input sensitive personal information into our application at the prototype phase. False information for purpose of inference will suffice. 
 
+## Test Instructions
+Our tests are located within the modules they test. This was done to emulate a distrubuted production environment. Run the following commands to execute the automated unit tests from the root directory assuming needed services are running:
+
+1. Flask Tests
+It is assumed the venv is active with all needed packages. 
+    ```bash
+    $ cd Disease\ Prediction\ Model/
+    $ Python3 test_flask_app
+    ```
+2. Model Tests
+It is assumed that all needed packages are installed.
+    ```bash
+    $ cd Disease\ Prediction\ Model/
+    $ Python3 -m coverage run --branch -m unittest .\test_model_interface.py
+    ```
+3. Express Tests
+It is assumed that all needed packages are installed.
+    ```bash
+    $ cd express-app
+    $ npm test mongo.test.js
+    ```
 
 ## Known Issues
 
