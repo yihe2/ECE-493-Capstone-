@@ -1,10 +1,9 @@
-// Home.js
-
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
+// default page for 
 const Home = () => {
   const navigate = useNavigate();
   const [showScore, setShowScore] = useState(false);
@@ -24,20 +23,20 @@ const Home = () => {
     event.preventDefault();
     console.log('Submitted Risk:', targetRisk);
     const email = sessionStorage.getItem("user");
-
+    // check if data exists
     try {
       const health_data = await axios.get(`http://localhost:3001/get-health-info?email=${email}`,
       {
         withCredentials: true,
       });
 
-
+      // check if data exists
       const fin_data = await axios.get(`http://localhost:3001/get-fin-info?email=${email}`,
       {
         withCredentials: true,
       });
 
-
+      // get command with mode 1
       if(fin_data.status === 200 && health_data.status === 200) {
         console.log("reached")
         // TODO: add route to express with risk level
@@ -50,7 +49,6 @@ const Home = () => {
         if(data.status === 200) {
           console.log("in the 200")
           setShowFinPlan(true)
-          // setShowFinPlan(`${data.data.score.toFixed(5) * 100}%`)
           
           console.log(data.data)
           console.log(data.data.monthly_installment)
@@ -97,7 +95,7 @@ const Home = () => {
   };
 
 
-
+  // FR6
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -122,7 +120,7 @@ const Home = () => {
     verifyUser();
   }, [])
 
-
+  // Submission for current score mode
   const handleSubmit = async () => {
     console.log("Call to Prediction::")
     const email = sessionStorage.getItem("user");
@@ -170,6 +168,7 @@ const Home = () => {
 
   }
 
+  // FR26, FR27, FR35, FR36, FR38, FR39, FR40
   return (
     <>
       <Navbar />

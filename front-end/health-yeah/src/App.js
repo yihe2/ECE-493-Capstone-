@@ -7,26 +7,20 @@ import HealthInfoForm from './pages/HealthInfoForm';
 import FinInfoForm from './pages/FinInfoForm';
 import ChangePassword from './pages/ChangePassword';
 import DeleteAccount from './pages/DeleteAccount';
-
-
-
 import { 
   BrowserRouter, 
   Route,
   Routes, 
-  Link, 
-  Redirect
 } from "react-router-dom";
 import InformationPage from './pages/InformationPage';
 import Home from './pages/Home';
 
 
-
+    // Routes for application
 const App = () => {
   return (
     <BrowserRouter>
       <Routes>
-        {/* does not work */}
         <Route path="/" element={<Home />}/>
         <Route path="/login" element={<Login />} />
         <Route path="/create-account" element={<CreateAccount/>}/>

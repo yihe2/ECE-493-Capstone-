@@ -1,5 +1,5 @@
 import React from 'react';
-
+// FR46
 const InformationPage = () => {
   return (
     <div className="container mx-auto p-4">
