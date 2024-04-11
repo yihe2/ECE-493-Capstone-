@@ -1,5 +1,3 @@
-// CreateAccount.js
-
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { useAuthContext } from '../hooks/useAuthContext'
@@ -30,7 +28,9 @@ const CreateAccount = () => {
       email: username,
       password: password,
     };
-    console.log({...createAccountData})
+
+
+    // call database for FR3
     try {
       const data = await axios.post("http://127.0.0.1:3001/create-account", createAccountData, {
         withCredentials: true,
@@ -40,11 +40,14 @@ const CreateAccount = () => {
       });
       console.log(data)
       if (data.data.email) {
+        //  FR5
         console.log('Create Account Successful!');
         sessionStorage.setItem('user', data.data.email)
         dispatch({type: 'LOGIN', payload: data.data.email})
         setIsLoading(false)
         navigate("/healthinfo")
+
+
         // Add redirection logic or any other actions after successful login
       } else {
         setError('Invalid username or password. Please try again.');
@@ -59,7 +62,7 @@ const CreateAccount = () => {
     }
   };
   
-
+  // FR1, FR2 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">
