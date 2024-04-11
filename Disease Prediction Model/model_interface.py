@@ -46,7 +46,7 @@ mappings = {
     "SkinCancer": {"No": 0, "Yes": 1},
 }
 
-
+# FR32 - Link Risk Level to Treatment
 risk_level_mapping = {
     (0, 20): {
         "cost_bounds": (0, 500),
@@ -148,15 +148,24 @@ def JSON_inperpreter(data):
             else:
                 senddata["monthly_installment"] = -1
 
+                # FR40 - Deliver Cost Based on Target Risk
                 # Incrementally simulate aging and recalculate risk
                 while health_info_values[9] <= 12:
+
+                    # FR37 - Increase Age Input into Model
                     health_info_values[9] += 1
+
+                    # FR38 - Repredict Based on Updated Risk
                     score = risk_score_prediction(health_info_values)
                     if score >= new_risk_level:
                         # Find the appropriate risk level mapping
                         for bounds, info in risk_level_mapping.items():
                             if bounds[0] <= score * 100 <= bounds[1]:
+
+                                # FR31 - Fetch the Current Cost for Different Treatments
                                 lower_bound, upper_bound = info["cost_bounds"]
+
+                                # FR27 - Recommend Treatment based on the risk of Cardiovascular Issues
                                 suggested_actions = info["suggested_actions"]
                                 break
 
@@ -174,6 +183,8 @@ def JSON_inperpreter(data):
 
                         years = (health_info_values[9] - age) * 4
                         senddata["years"] = years
+
+                        # FR42 - Generate Budget Based On Target Risk Level
                         lower_monthly_installment = calculate_monthly_contribution(
                             years, lower_bound, asset, income, expense, stock, debt
                         )
@@ -233,6 +244,7 @@ def risk_score_prediction(user_input):
     # Create a dataframe from the user input
     user_input_df = pd.DataFrame([user_input], columns=feature_names)
 
+    # FR26 - Deliver Cardiovascular Risk Level Prediction
     # Predict the probability of risk
     probability = rf_classifier_loaded.predict_proba(user_input_df)
     return probability[0][1]
@@ -266,6 +278,7 @@ def calculate_monthly_contribution(
     months = years * 12
     monthly_rate = (1 + inflation_rate) ** (1 / 12) - 1
 
+    # FR45 - Calculate Future Value of Debt
     # Inflate debt annually by the inflation rate
     inflated_debt = debt * ((1 + inflation_rate) ** years)
 
@@ -291,9 +304,14 @@ def calculate_monthly_contribution(
         inflated_debt *= 1 + inflation_rate  # Inflate the remaining debt
 
     # If there's still debt left after all years, add it to the saving goal
+
+    # FR39 - Calculate Total Cost of Future Treatment
     future_value_goal = (saving_goal + inflated_debt) * ((1 + inflation_rate) ** years)
+
+    # FR43 - Calculate Future Value of Investments
     future_value_stock = stock_value * ((1 + stock_rate) ** years)
 
+    # FR44 - Calculate Future Value of Savings
     future_value_asset = total_asset + future_value_stock
 
     if future_value_asset >= future_value_goal:
