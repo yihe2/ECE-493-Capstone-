@@ -205,9 +205,8 @@ async function updateHealthInformation(email, updates, client) {
   }
 }
 
+// FR25
 async function getHealthInformation(email, client) {
-
-
   try {
     const database = client.db("test");
     const collection = database.collection("HealthInformation");
@@ -229,7 +228,7 @@ async function getHealthInformation(email, client) {
   } finally {
   }
 }
-
+// part of FR41
 async function getFinancialInformation(email, client) {
 
   try {
@@ -283,6 +282,7 @@ async function updateFinancialInformation(email, updates, client) {
   }
 }
 
+// FR17
 async function updateUserInformation(email, updates, client) {
 
   try {

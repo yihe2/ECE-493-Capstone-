@@ -7,7 +7,7 @@ const MailerSend = require("mailersend");
 
 
 const maxAge = 3*24*60*60; // 3 days
-
+// create token for auth
 const createToken = (id) => {
     return jwt.sign({id}, "key", {
       expiresIn: maxAge,
@@ -38,7 +38,7 @@ const handleErrors = (err) => {
     }
 };
 
-
+// FR1, FR4
 module.exports.register = async (req, res, next) => {
     try {
       const { email, password } = req.body;
@@ -62,6 +62,8 @@ module.exports.register = async (req, res, next) => {
       const emailParams = new EmailParams()
       emailParams.setFrom(sentFrom).setTo(recipients).setReplyTo(sentFrom).setSubject("Sign up").setHtml("Thanks for signing up for healthwealth").setText("Thanks for signing up for healthwealth");
 
+
+      // FR4 -> Send confirmation email -> reached limit
       await mailerSend.email.send(emailParams).then((result) => {
         console.log(result);
       })
@@ -78,6 +80,7 @@ module.exports.register = async (req, res, next) => {
     }
   };
 
+  //FR5
 module.exports.log_in = async (req, res, next) => {
     try {
         const { email, password } = req.body;
@@ -104,6 +107,7 @@ module.exports.log_in = async (req, res, next) => {
       }
 };
 
+//FR7
 module.exports.changePassword = async (req, res, next) => {
   try {
     const { email, password, newPassword } = req.body.password_data;
@@ -121,6 +125,7 @@ module.exports.changePassword = async (req, res, next) => {
   }
 };
 
+// FR7
 module.exports.changeEmail = async (req, res, next) => {
   try {
     const { email, newEmail, password } = req.body.email_data;

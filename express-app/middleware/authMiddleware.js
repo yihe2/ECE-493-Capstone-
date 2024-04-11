@@ -1,6 +1,7 @@
 const User = require("../models/userModel");
 const jwt = require("jsonwebtoken");
 
+// FR5
 module.exports.checkUser = (req, res, next) => {
     const token = req.cookies.jwt;
     if (token) {
@@ -20,7 +21,7 @@ module.exports.checkUser = (req, res, next) => {
                     next();    
                 }
             }
-        }) // change to env variable
+        }) 
     }
     else {
         res.json({status: false});

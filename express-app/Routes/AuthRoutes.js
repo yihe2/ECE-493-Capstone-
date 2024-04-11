@@ -14,24 +14,35 @@ const client = new MongoClient(uri, {
     deprecationErrors: true,
   },
 });
-// TODO: Change such that it presents message on successful connect
-console.log("Reached here???")
+
+
 client.connect().then(() => {
   console.log("DB Connection Successful from authroutes")
 }).catch(err => {
   console.log(err.message)
 })
 
-
+// test get route
 router.get('/', (req, res) => {
     res.send('Poppin here');
 });
 
+// FR1
 router.post('/create-account', register);
+
+//FR5
 router.post("/login", log_in);
+
+//FR10
 router.put("/change-password", changePassword);
+
+//FR7
 router.put("/change-email", changeEmail)
+
+//FR6
 router.post("/secret", checkUser)
+
+//FR15
 router.post("/insert-health-info",  async (req, res) => {
   try {
     const {
@@ -54,7 +65,8 @@ router.post("/insert-health-info",  async (req, res) => {
       mentalHealth,
       sleepTime,
     } = req.body;
-     // should work
+
+
     insertHealthInformation(
       email,
       smoking,
@@ -83,6 +95,7 @@ router.post("/insert-health-info",  async (req, res) => {
   }
 });
 
+// FR17
 router.put("/update-health-info", async (req, res) => {
   try {
     const updates = req.body
@@ -95,6 +108,7 @@ router.put("/update-health-info", async (req, res) => {
   }
 })
 
+//FR 25
 router.get("/get-health-info", async (req, res) => {
   try {
     const {email} = req.query
@@ -114,7 +128,7 @@ router.get("/get-health-info", async (req, res) => {
   }
 })
 
-
+//FR28
 router.post("/insert-fin-info",  async (req, res) => {
   try {
     const {
@@ -143,7 +157,7 @@ router.post("/insert-fin-info",  async (req, res) => {
   }
 });
 
-
+//FR 33
 router.put("/update-fin-info", async (req, res) => {
   try {
     const updates = req.body
@@ -154,6 +168,7 @@ router.put("/update-fin-info", async (req, res) => {
   }
 })
 
+//FR28
 router.get("/get-fin-info", async (req, res) => {
   try {
     const {email} = req.query
@@ -173,6 +188,7 @@ router.get("/get-fin-info", async (req, res) => {
   }
 })
 
+//FR26
 router.get("/score-predict", async (req, res) => {
   try {
     const {email, riskLevel, mode} = req.query
@@ -190,6 +206,7 @@ router.get("/score-predict", async (req, res) => {
   }
 })
 
+//FR12
 router.put("/delete-user", async (req, res) => {
   try {
     const data = req.body;
@@ -200,6 +217,7 @@ router.put("/delete-user", async (req, res) => {
   }
 });
 
+//FR11
 router.put("/delete-all", async (req, res) => {
   try {
     const data = req.body;

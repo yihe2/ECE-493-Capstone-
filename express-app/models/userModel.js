@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const bcrypt = require("bcrypt")
 
+// user for account creation
 const userSchema = new mongoose.Schema({
     email: {
         type: String,
@@ -13,12 +14,16 @@ const userSchema = new mongoose.Schema({
     },
 });
 
+// hash password
+// FR47
 userSchema.pre("save", async function (next) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
     next();
   });
 
+
+// FR5
 userSchema.statics.login = async function(email, password) {
     const user = await this.findOne({email});
 
@@ -38,6 +43,7 @@ userSchema.statics.login = async function(email, password) {
     }
 }
 
+// FR7, FR8, FR10 
 userSchema.statics.changePassword = async function(email, password, newPassword) {
     // Find the user by email
     const user = await this.findOne({ email });
@@ -52,9 +58,6 @@ userSchema.statics.changePassword = async function(email, password, newPassword)
         throw new Error("Incorrect current password");
     }
 
-    // Hash the new password
-    // const salt = await bcrypt.genSalt();
-    // const newPasswordHash = await bcrypt.hash(newPassword, salt);
 
     // Update the user's password
     user.password = newPassword;
@@ -65,6 +68,7 @@ userSchema.statics.changePassword = async function(email, password, newPassword)
     return user;
 }
 
+// FR7, FR8
 userSchema.statics.changeEmail = async function(email, newEmail, password) {
     // Find the user by email
     const user = await this.findOne({ email });
@@ -78,10 +82,6 @@ userSchema.statics.changeEmail = async function(email, newEmail, password) {
     if (!isPasswordValid) {
         throw new Error("Incorrect current password");
     }
-
-    // Hash the new password
-    // const salt = await bcrypt.genSalt();
-    // const newPasswordHash = await bcrypt.hash(newPassword, salt);
 
     // Update the user's password
     user.email = newEmail;
