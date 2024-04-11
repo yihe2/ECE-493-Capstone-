@@ -34,12 +34,10 @@ const Login = () => {
 
       if (response.status === 200) {
         console.log(response);
-        // console.log(response)
-        // Add redirection logic or any other actions after successful login
         
         sessionStorage.setItem('user', response.data.email)
 
-        // update the auth context
+        // context update 
         dispatch({type: 'LOGIN', payload: response.data.email})
   
         // update loading state
@@ -58,6 +56,7 @@ const Login = () => {
     }
   };
 
+  // FR5, FR6, 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="bg-white p-8 rounded shadow-md w-96">

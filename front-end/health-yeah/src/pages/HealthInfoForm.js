@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 
 const HealthInfoForm = () => {
   const navigate = useNavigate();
+  //  default values
   const [formData, setFormData] = useState({
     email: '',
     smoking: 'No',
@@ -26,7 +27,7 @@ const HealthInfoForm = () => {
     sleepTime: '8',
   });
 
-    // login effect
+    // login effect FR6
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -51,7 +52,7 @@ const HealthInfoForm = () => {
   }, [])
 
 
-
+  // check for existing health information
   useEffect(() => {
     const checkInfo = async () => {
         const data = await axios.get(`http://localhost:3001/get-health-info?email=${sessionStorage.getItem("user")}`,
@@ -76,7 +77,6 @@ const HealthInfoForm = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
     const email_string = sessionStorage.getItem("user")
     setFormData({
       ...formData,
@@ -95,9 +95,7 @@ const HealthInfoForm = () => {
     e.preventDefault();
 
 
-    // /insert-health-info
-    console.log(formData);
-
+    // insert health data
     try {
       const get_response = await axios.get(`http://localhost:3001/get-health-info?email=${sessionStorage.getItem("user")}`,
       {
@@ -108,7 +106,6 @@ const HealthInfoForm = () => {
       console.log("before status ;pgged")
       console.log(get_response.status)
       if (get_response.status === 200) {
-        // update
         console.log(formData)
         const response = await axios.put("http://127.0.0.1:3001/update-health-info", formData, {
           withCredentials: true,
@@ -139,6 +136,7 @@ const HealthInfoForm = () => {
     }
   };
 
+  // F13, FR14, F15, FR16, FR17
   return (
     <>
       <Navbar />
@@ -173,7 +171,6 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="race">Race</label>
             <select className="form-select w-full" id="race" name="race" value={formData.race} onChange={handleChange}>
-              {/* {'American Indian/Alaskan Native': 0, 'Asian': 1, 'Black': 2, 'Hispanic': 3, 'Other': 4, 'White': 5} */}
               <option value="American Indian/Alaskan Native">American Indian/Alaskan Native</option>
               <option value="Asian">Asian</option>
               <option value="Black">Black</option>
@@ -208,7 +205,6 @@ const HealthInfoForm = () => {
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="generalHealth">General Health</label>
             <select className="form-select w-full" id="generalHealth" name="generalHealth" value={formData.generalHealth} onChange={handleChange} required>
-              {/* {'Excellent': 0, 'Fair': 1, 'Good': 2, 'Poor': 3, 'Very good': 4} */}
               <option value="Excellent">Excellent</option>
               <option value="Very good">Very Good</option>
               <option value="Good">Good</option>

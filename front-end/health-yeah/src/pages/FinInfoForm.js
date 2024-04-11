@@ -14,6 +14,7 @@ const FinInfoForm = () => {
       debt: '0'
   });
 
+  // FR6
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -37,7 +38,7 @@ const FinInfoForm = () => {
   }
     verifyUser();
   }, [])
-
+  // check for existing informaton
   useEffect(() => {
     const checkInfo = async () => {
         const data = await axios.get(`http://localhost:3001/get-fin-info?email=${sessionStorage.getItem("user")}`,
@@ -57,8 +58,6 @@ const FinInfoForm = () => {
     checkInfo();
   }, [])
 
-
-
   const handleChange = (e) => {
     const { name, value } = e.target;
     const email_string = sessionStorage.getItem("user");
@@ -69,11 +68,10 @@ const FinInfoForm = () => {
     });
   };
 
+  // send to database endpoint
   const handleSubmit = async (e) => {
     e.preventDefault();
     const email_string = sessionStorage.getItem("user")
-    // Here you can perform any action with the form data, such as submitting it to a backend
-    console.log(formData);
   
     setFormData({
       ...formData,
@@ -88,7 +86,6 @@ const FinInfoForm = () => {
       });
       
       if (get_response.status === 200) {
-        // update
         const response = await axios.put("http://127.0.0.1:3001/update-fin-info", formData, {
           withCredentials: true,
         });
@@ -120,6 +117,7 @@ const FinInfoForm = () => {
 
   };
 
+  // FR28, FR29, FR30, FR33, FR34
   return (
     <>
       <Navbar />
@@ -142,7 +140,6 @@ const FinInfoForm = () => {
           <div className="mb-4">          
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="investments">Value of All Investments ($)</label>
             <input type="number" className="form-input w-full" id="investments" name="investments" min="0" value={formData.investments} onChange={handleChange} />
-              {/* <input type="text" className="form-input w-full" id="smoking" name="smoking" value={formData.smoking} onChange={handleChange} /> */}
           </div>
           <div className="mb-4">
             <label className="block text-gray-700 font-semibold mb-2" htmlFor="debt">Total Outstanding Debts ($)</label>

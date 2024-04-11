@@ -5,8 +5,12 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 
+
+
 const DeleteAccount = () => {
   const navigate = useNavigate();
+
+  // FR 6
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -31,6 +35,7 @@ const DeleteAccount = () => {
     verifyUser();
   }, [])
 
+  // FR 12
   const handleDeleteAccount = async () => {
     // Logic to delete account
     console.log('Account deleted');
@@ -41,7 +46,7 @@ const DeleteAccount = () => {
       });
 
       if (response.status === 200) {
-        console.log("successful delete??")
+        console.log("successful delete")
         sessionStorage.removeItem("user")
         navigate("/login");
       }
@@ -56,6 +61,7 @@ const DeleteAccount = () => {
 
   };
 
+  // FR 11
   const handleDeleteAccountWithInfo = async () => {
     // Logic to delete account along with information
     console.log('Account and information deleted');
@@ -78,6 +84,7 @@ const DeleteAccount = () => {
     }
   };
 
+  // FR 11, 12
   return (
     <>
       <Navbar />

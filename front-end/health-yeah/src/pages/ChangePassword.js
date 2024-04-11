@@ -15,7 +15,7 @@ const ChangePassword = () => {
   const [errorEmail, setErrorEmail] = useState('')
   const navigate = useNavigate();
 
-
+  // FR6
   useEffect(() => {
     const verifyUser = async () => {
       if (sessionStorage.getItem("user") === null) {
@@ -39,6 +39,7 @@ const ChangePassword = () => {
     verifyUser();
   }, [])
 
+  // input change handler
   const handleChange = (e) => {
     const { name, value } = e.target;
     if (name === 'currentPassword') {
@@ -93,6 +94,7 @@ const ChangePassword = () => {
     setErrorMessage('');
   };
 
+  // handler function to call database
   const handleUsernameSubmit = async (e) => {
     e.preventDefault();
 
@@ -113,7 +115,7 @@ const ChangePassword = () => {
     // Implement password change logic here
     console.log('change username  submitted');
 
-    
+    // route
     try {
       const data = await axios.put("http://localhost:3001/change-email", {email_data},
         {
@@ -123,6 +125,7 @@ const ChangePassword = () => {
       console.log(e)
     }
 
+    // reset storage
     sessionStorage.setItem('user', email_data.newEmail)
 
     setCurrentPassword('');
@@ -132,9 +135,11 @@ const ChangePassword = () => {
   };
 
 
+  // component implements FR7, FR8, and FR9
   return (
     <>
       <Navbar />
+      {/* modify username */}
       <div className="bg-gray-100 min-h-screen flex flex-col justify-center items-center">
         <div className="bg-white p-8 rounded shadow-md w-96 mb-4">
           <h2 className="text-2xl font-bold mb-6">Change Username</h2>
@@ -194,7 +199,7 @@ const ChangePassword = () => {
 
 
 
-
+        {/* modify password */}
         <div className="bg-white p-8 rounded shadow-md w-96 mt-4">
           <h2 className="text-2xl font-bold mb-6">Change Password</h2>
           {errorMessage && (
