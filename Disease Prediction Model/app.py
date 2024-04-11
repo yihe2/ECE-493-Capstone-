@@ -12,6 +12,7 @@ app = Flask(__name__)
 def hello_world():
     return 'Hello, World!'
 
+# FR 26 and 27
 @app.route('/recieve/newuser', methods=['POST'])
 def receive_health():
     data = request.json
