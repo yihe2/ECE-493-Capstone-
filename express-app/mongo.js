@@ -17,6 +17,7 @@ const client = new MongoClient(uri, {
 
 
 // Function for inserting Health Information
+// FR15
 async function insertHealthInformation(
   email,
   smoking,
@@ -73,6 +74,7 @@ async function insertHealthInformation(
 }
 
 // Function for injecting Financial Information
+// FR28 and FR30
 async function insertFinancialInformation(
   email,
   income,
@@ -105,6 +107,7 @@ async function insertFinancialInformation(
 }
 
 // Send to backend using this
+// Builds towards FR25
 async function sendNewUser(email, riskLevel, mode, client) {
 
   try {
@@ -167,6 +170,7 @@ async function sendNewUser(email, riskLevel, mode, client) {
   }
 }
 // Updating Functions
+// FR 16 and FR 17
 async function updateHealthInformation(email, updates, client) {
   
   try {
@@ -250,6 +254,7 @@ async function getFinancialInformation(email, client) {
   }
 }
 
+// FR 33 and FR34
 async function updateFinancialInformation(email, updates, client) {
 
   try {
@@ -303,7 +308,7 @@ async function updateUserInformation(email, updates, client) {
   }
 }
 
-// Code for deletinng collections
+// Code for deletinng collections, FR12
 async function deleteUser(email, client) {
   try {
 
@@ -326,6 +331,7 @@ async function deleteUser(email, client) {
   }
 }
 
+// FR 11 Complete Removal of all info
 async function deleteHealthInformation(email, client) {
   try {
     // await client.connect();
@@ -346,6 +352,7 @@ async function deleteHealthInformation(email, client) {
   }
 }
 
+// FR 11 Complete Removal of all info
 async function deleteFinancialInformation(email, client) {
   try {
     const database = client.db("test");
@@ -365,6 +372,7 @@ async function deleteFinancialInformation(email, client) {
   }
 }
 
+// FR 11 Complete Removal of all info
 async function deleteAllInformation(email, client) {
   try {
     const database = client.db("test");
