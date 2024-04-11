@@ -69,7 +69,7 @@ Add the following variables within the newly created .env file.
     $ cd front-end/health-yeah/
     $ npm i
     ```
-2. **Run the following command to deploy the react applcation on 127.0.0.1/3000** 
+2. **Run the following command to deploy the react applcation on 127.0.0.1:3000** 
     ```bash
     $ npm run start
     ```
