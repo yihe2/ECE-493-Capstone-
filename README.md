@@ -94,7 +94,7 @@ It is assumed the venv is active with all needed packages.
 It is assumed that all needed packages are installed.
     ```bash
     $ cd Disease\ Prediction\ Model/
-    $ Python3 -m coverage run --branch -m unittest .\test_model_interface.py
+    $ Python3 -m coverage run --branch -m unittest test_model_interface.py
     ```
 3. Express Tests
 It is assumed that all needed packages are installed.
