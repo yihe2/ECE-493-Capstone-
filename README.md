@@ -88,7 +88,7 @@ Our tests are located within the modules they test. This was done to emulate a d
 It is assumed the venv is active with all needed packages. 
     ```bash
     $ cd Disease\ Prediction\ Model/
-    $ Python3 test_flask_app
+    $ Python3 -m coverage run --branch -m unittest test_flask_app.py
     ```
 2. Model Tests
 It is assumed that all needed packages are installed.
