@@ -47,7 +47,7 @@ Add the following variables within the newly created .env file.
 3. **Run the Following command to begin the Flask service** 
     Assuming the previous packages installed with no errors, run the following command to deploy the microservice. 
    ```bash
-   $ Python3 app.py
+   $ Python app.py
    ```
 
 ### Express App Setup
@@ -88,13 +88,13 @@ Our tests are located within the modules they test. This was done to emulate a d
 It is assumed the venv is active with all needed packages. 
     ```bash
     $ cd Disease\ Prediction\ Model/
-    $ Python3 -m coverage run --branch -m unittest test_flask_app.py
+    $ Python -m coverage run --branch -m unittest test_flask_app.py
     ```
 2. Model Tests
 It is assumed that all needed packages are installed.
     ```bash
     $ cd Disease\ Prediction\ Model/
-    $ Python3 -m coverage run --branch -m unittest test_model_interface.py
+    $ Python -m coverage run --branch -m unittest test_model_interface.py
     ```
 3. Express Tests
 It is assumed that all needed packages are installed.
